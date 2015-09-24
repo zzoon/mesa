@@ -375,7 +375,7 @@ CreateContext(Display *dpy, int generic_id, struct glx_config *config,
    return (GLXContext) gc;
 }
 
-_X_EXPORT GLXContext
+_GLX_PUBLIC GLXContext
 glXCreateContext(Display * dpy, XVisualInfo * vis,
                  GLXContext shareList, Bool allowDirect)
 {
@@ -450,7 +450,7 @@ glx_send_destroy_context(Display *dpy, XID xid)
 ** Destroy the named context
 */
 
-_X_EXPORT void
+_GLX_PUBLIC void
 glXDestroyContext(Display * dpy, GLXContext ctx)
 {
    struct glx_context *gc = (struct glx_context *) ctx;
@@ -478,7 +478,7 @@ glXDestroyContext(Display * dpy, GLXContext ctx)
 /*
 ** Return the major and minor version #s for the GLX extension
 */
-_X_EXPORT Bool
+_GLX_PUBLIC Bool
 glXQueryVersion(Display * dpy, int *major, int *minor)
 {
    struct glx_display *priv;
@@ -498,7 +498,7 @@ glXQueryVersion(Display * dpy, int *major, int *minor)
 /*
 ** Query the existance of the GLX extension
 */
-_X_EXPORT Bool
+_GLX_PUBLIC Bool
 glXQueryExtension(Display * dpy, int *errorBase, int *eventBase)
 {
    int major_op, erb, evb;
@@ -518,7 +518,7 @@ glXQueryExtension(Display * dpy, int *errorBase, int *eventBase)
 ** Put a barrier in the token stream that forces the GL to finish its
 ** work before X can proceed.
 */
-_X_EXPORT void
+_GLX_PUBLIC void
 glXWaitGL(void)
 {
    struct glx_context *gc = __glXGetCurrentContext();
@@ -531,7 +531,7 @@ glXWaitGL(void)
 ** Put a barrier in the token stream that forces X to finish its
 ** work before GL can proceed.
 */
-_X_EXPORT void
+_GLX_PUBLIC void
 glXWaitX(void)
 {
    struct glx_context *gc = __glXGetCurrentContext();
@@ -540,7 +540,7 @@ glXWaitX(void)
       gc->vtable->wait_x(gc);
 }
 
-_X_EXPORT void
+_GLX_PUBLIC void
 glXUseXFont(Font font, int first, int count, int listBase)
 {
    struct glx_context *gc = __glXGetCurrentContext();
@@ -555,7 +555,7 @@ glXUseXFont(Font font, int first, int count, int listBase)
 ** Copy the source context to the destination context using the
 ** attribute "mask".
 */
-_X_EXPORT void
+_GLX_PUBLIC void
 glXCopyContext(Display * dpy, GLXContext source_user,
 	       GLXContext dest_user, unsigned long mask)
 {
@@ -656,7 +656,7 @@ __glXIsDirect(Display * dpy, GLXContextID contextID)
  * \c GLX_DIRECT_RENDERING is not defined?  Do we really need to bother with
  * the GLX protocol here at all?
  */
-_X_EXPORT Bool
+_GLX_PUBLIC Bool
 glXIsDirect(Display * dpy, GLXContext gc_user)
 {
    struct glx_context *gc = (struct glx_context *) gc_user;
@@ -674,7 +674,7 @@ glXIsDirect(Display * dpy, GLXContext gc_user)
 #endif
 }
 
-_X_EXPORT GLXPixmap
+_GLX_PUBLIC GLXPixmap
 glXCreateGLXPixmap(Display * dpy, XVisualInfo * vis, Pixmap pixmap)
 {
 #ifdef GLX_USE_APPLEGL
@@ -768,7 +768,7 @@ glXCreateGLXPixmap(Display * dpy, XVisualInfo * vis, Pixmap pixmap)
 /*
 ** Destroy the named pixmap
 */
-_X_EXPORT void
+_GLX_PUBLIC void
 glXDestroyGLXPixmap(Display * dpy, GLXPixmap glxpixmap)
 {
 #ifdef GLX_USE_APPLEGL
@@ -808,7 +808,7 @@ glXDestroyGLXPixmap(Display * dpy, GLXPixmap glxpixmap)
 #endif /* GLX_USE_APPLEGL */
 }
 
-_X_EXPORT void
+_GLX_PUBLIC void
 glXSwapBuffers(Display * dpy, GLXDrawable drawable)
 {
 #ifdef GLX_USE_APPLEGL
@@ -868,7 +868,7 @@ glXSwapBuffers(Display * dpy, GLXDrawable drawable)
 ** Return configuration information for the given display, screen and
 ** visual combination.
 */
-_X_EXPORT int
+_GLX_PUBLIC int
 glXGetConfig(Display * dpy, XVisualInfo * vis, int attribute,
              int *value_return)
 {
@@ -1227,7 +1227,7 @@ choose_visual(struct glx_config ** configs, int num_configs,
 ** Return the visual that best matches the template.  Return None if no
 ** visual matches the template.
 */
-_X_EXPORT XVisualInfo *
+_GLX_PUBLIC XVisualInfo *
 glXChooseVisual(Display * dpy, int screen, int *attribList)
 {
    XVisualInfo *visualList = NULL;
@@ -1293,7 +1293,7 @@ glXChooseVisual(Display * dpy, int screen, int *attribList)
 }
 
 
-_X_EXPORT const char *
+_GLX_PUBLIC const char *
 glXQueryExtensionsString(Display * dpy, int screen)
 {
    struct glx_screen *psc;
@@ -1322,7 +1322,7 @@ glXQueryExtensionsString(Display * dpy, int screen)
    return psc->effectiveGLXexts;
 }
 
-_X_EXPORT const char *
+_GLX_PUBLIC const char *
 glXGetClientString(Display * dpy, int name)
 {
    (void) dpy;
@@ -1339,7 +1339,7 @@ glXGetClientString(Display * dpy, int name)
    }
 }
 
-_X_EXPORT const char *
+_GLX_PUBLIC const char *
 glXQueryServerString(Display * dpy, int screen, int name)
 {
    struct glx_screen *psc;
@@ -1390,7 +1390,7 @@ __glXClientInfo(Display * dpy, int opcode)
 ** EXT_import_context
 */
 
-_X_EXPORT Display *
+_GLX_PUBLIC Display *
 glXGetCurrentDisplay(void)
 {
    struct glx_context *gc = __glXGetCurrentContext();
@@ -1399,12 +1399,12 @@ glXGetCurrentDisplay(void)
    return gc->currentDpy;
 }
 
-_X_EXPORT
+_GLX_PUBLIC
 GLX_ALIAS(Display *, glXGetCurrentDisplayEXT, (void), (),
           glXGetCurrentDisplay)
 
 #ifndef GLX_USE_APPLEGL
-_X_EXPORT GLXContext
+_GLX_PUBLIC GLXContext
 glXImportContextEXT(Display *dpy, GLXContextID contextID)
 {
    struct glx_display *priv = __glXInitialize(dpy);
@@ -1540,7 +1540,7 @@ glXImportContextEXT(Display *dpy, GLXContextID contextID)
 
 #endif
 
-_X_EXPORT int
+_GLX_PUBLIC int
 glXQueryContext(Display * dpy, GLXContext ctx_user, int attribute, int *value)
 {
    struct glx_context *ctx = (struct glx_context *) ctx_user;
@@ -1567,19 +1567,19 @@ glXQueryContext(Display * dpy, GLXContext ctx_user, int attribute, int *value)
    return Success;
 }
 
-_X_EXPORT
+_GLX_PUBLIC
 GLX_ALIAS(int, glXQueryContextInfoEXT,
           (Display * dpy, GLXContext ctx, int attribute, int *value),
           (dpy, ctx, attribute, value), glXQueryContext)
 
-_X_EXPORT GLXContextID glXGetContextIDEXT(const GLXContext ctx_user)
+_GLX_PUBLIC GLXContextID glXGetContextIDEXT(const GLXContext ctx_user)
 {
    struct glx_context *ctx = (struct glx_context *) ctx_user;
 
    return (ctx == NULL) ? None : ctx->xid;
 }
 
-_X_EXPORT void
+_GLX_PUBLIC void
 glXFreeContextEXT(Display *dpy, GLXContext ctx)
 {
    struct glx_context *gc = (struct glx_context *) ctx;
@@ -1604,7 +1604,7 @@ glXFreeContextEXT(Display *dpy, GLXContext ctx)
    __glXUnlock();
 }
 
-_X_EXPORT GLXFBConfig *
+_GLX_PUBLIC GLXFBConfig *
 glXChooseFBConfig(Display * dpy, int screen,
                   const int *attribList, int *nitems)
 {
@@ -1628,7 +1628,7 @@ glXChooseFBConfig(Display * dpy, int screen,
 }
 
 
-_X_EXPORT GLXContext
+_GLX_PUBLIC GLXContext
 glXCreateNewContext(Display * dpy, GLXFBConfig fbconfig,
                     int renderType, GLXContext shareList, Bool allowDirect)
 {
@@ -1640,7 +1640,7 @@ glXCreateNewContext(Display * dpy, GLXFBConfig fbconfig,
 }
 
 
-_X_EXPORT GLXDrawable
+_GLX_PUBLIC GLXDrawable
 glXGetCurrentReadDrawable(void)
 {
    struct glx_context *gc = __glXGetCurrentContext();
@@ -1649,7 +1649,7 @@ glXGetCurrentReadDrawable(void)
 }
 
 
-_X_EXPORT GLXFBConfig *
+_GLX_PUBLIC GLXFBConfig *
 glXGetFBConfigs(Display * dpy, int screen, int *nelements)
 {
    struct glx_display *priv = __glXInitialize(dpy);
@@ -1690,7 +1690,7 @@ glXGetFBConfigs(Display * dpy, int screen, int *nelements)
 }
 
 
-_X_EXPORT int
+_GLX_PUBLIC int
 glXGetFBConfigAttrib(Display * dpy, GLXFBConfig fbconfig,
                      int attribute, int *value)
 {
@@ -1703,7 +1703,7 @@ glXGetFBConfigAttrib(Display * dpy, GLXFBConfig fbconfig,
 }
 
 
-_X_EXPORT XVisualInfo *
+_GLX_PUBLIC XVisualInfo *
 glXGetVisualFromFBConfig(Display * dpy, GLXFBConfig fbconfig)
 {
    XVisualInfo visualTemplate;
@@ -1911,21 +1911,21 @@ __glXWaitVideoSyncSGI(int divisor, int remainder, unsigned int *count)
 ** GLX_functions table.
 */
 
-_X_EXPORT
+_GLX_PUBLIC
 GLX_ALIAS(int, glXGetFBConfigAttribSGIX,
           (Display * dpy, GLXFBConfigSGIX config, int attribute, int *value),
           (dpy, config, attribute, value), glXGetFBConfigAttrib)
 
-_X_EXPORT GLX_ALIAS(GLXFBConfigSGIX *, glXChooseFBConfigSGIX,
+_GLX_PUBLIC GLX_ALIAS(GLXFBConfigSGIX *, glXChooseFBConfigSGIX,
                  (Display * dpy, int screen, int *attrib_list,
                   int *nelements), (dpy, screen, attrib_list, nelements),
                  glXChooseFBConfig)
 
-_X_EXPORT GLX_ALIAS(XVisualInfo *, glXGetVisualFromFBConfigSGIX,
+_GLX_PUBLIC GLX_ALIAS(XVisualInfo *, glXGetVisualFromFBConfigSGIX,
                  (Display * dpy, GLXFBConfigSGIX config),
                  (dpy, config), glXGetVisualFromFBConfig)
 
-_X_EXPORT GLXPixmap
+_GLX_PUBLIC GLXPixmap
 glXCreateGLXPixmapWithConfigSGIX(Display * dpy,
                                  GLXFBConfigSGIX fbconfig,
                                  Pixmap pixmap)
@@ -1978,7 +1978,7 @@ glXCreateGLXPixmapWithConfigSGIX(Display * dpy,
 #endif
 }
 
-_X_EXPORT GLXContext
+_GLX_PUBLIC GLXContext
 glXCreateContextWithConfigSGIX(Display * dpy,
                                GLXFBConfigSGIX fbconfig, int renderType,
                                GLXContext shareList, Bool allowDirect)
@@ -2005,7 +2005,7 @@ glXCreateContextWithConfigSGIX(Display * dpy,
 }
 
 
-_X_EXPORT GLXFBConfigSGIX
+_GLX_PUBLIC GLXFBConfigSGIX
 glXGetFBConfigFromVisualSGIX(Display * dpy, XVisualInfo * vis)
 {
    struct glx_display *priv;
@@ -2321,7 +2321,7 @@ __glXReleaseBuffersMESA(Display * dpy, GLXDrawable d)
 }
 
 
-_X_EXPORT GLXPixmap
+_GLX_PUBLIC GLXPixmap
 glXCreateGLXPixmapMESA(Display * dpy, XVisualInfo * visual,
                        Pixmap pixmap, Colormap cmap)
 {
@@ -2625,7 +2625,7 @@ get_glx_proc_address(const char *funcName)
  *
  * \sa glXGetProcAddress
  */
-_X_EXPORT void (*glXGetProcAddressARB(const GLubyte * procName)) (void)
+_GLX_PUBLIC void (*glXGetProcAddressARB(const GLubyte * procName)) (void)
 {
    typedef void (*gl_function) (void);
    gl_function f;

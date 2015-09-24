@@ -59,6 +59,12 @@
 
 #include "glxextensions.h"
 
+#if  defined(USE_LIBGLVND_GLX)
+#define _GLX_PUBLIC _X_HIDDEN
+#else
+#define _GLX_PUBLIC _X_EXPORT
+#endif
+
 #define ARRAY_SIZE(a) (sizeof (a) / sizeof ((a)[0]))
 
 #define GLX_MAJOR_VERSION 1       /* current version numbers */

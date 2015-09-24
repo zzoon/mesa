@@ -40,6 +40,10 @@
 #define __WIN32__
 #endif
 
+#if defined(USE_LIBGLVND_GLX)
+#  define GLAPI __attribute__((visibility("hidden")))
+#  define GLAPIENTRY
+#else // defined(USE_LIBGLVND_GLX)
 #if defined(__WIN32__) && !defined(__CYGWIN__)
 #  if (defined(_MSC_VER) || defined(__MINGW32__)) && defined(BUILD_GL32) /* tag specify we're building mesa as a DLL */
 #    define GLAPI __declspec(dllexport)
@@ -60,6 +64,7 @@
 #  define GLAPI __attribute__((visibility("default")))
 #  define GLAPIENTRY
 #endif /* WIN32 && !CYGWIN */
+#endif // defined(USE_LIBGLVND_GLX)
 
 /*
  * WINDOWS: Include windows.h here to define APIENTRY.
