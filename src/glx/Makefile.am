@@ -45,7 +45,6 @@ AM_CFLAGS = \
 	$(EXTRA_DEFINES_XF86VIDMODE) \
 	-D_REENTRANT \
 	-DDEFAULT_DRIVER_DIR=\"$(DRI_DRIVER_SEARCH_DIR)\" \
-	-DGL_LIB_NAME=\"lib@GL_LIB@.so.1\" \
 	$(DEFINES) \
 	$(LIBDRM_CFLAGS) \
 	$(DRI2PROTO_CFLAGS) \
@@ -103,6 +102,22 @@ libglx_la_SOURCES += \
           dri3_glx.c
 endif
 
+if USE_LIBGLVND_GLX
+AM_CFLAGS += \
+	-DGL_LIB_NAME=\"lib@GL_LIB@.so.0\" \
+	-I$(top_srcdir)/include/libglvnd
+
+libglx_la_SOURCES += \
+          glxglvnd.c \
+          g_glxglvnddispatchfuncs.c
+
+GL_LIB_VERSION=0
+else
+AM_CFLAGS += \
+	-DGL_LIB_NAME=\"lib@GL_LIB@.so.1\"
+GL_LIB_VERSION=1:2
+endif
+
 libglx_la_LIBADD = $(top_builddir)/src/loader/libloader.la
 
 GL_LIBS = \
@@ -113,7 +128,13 @@ GL_LIBS = \
 
 GL_LDFLAGS = \
 	-Wl,-Bsymbolic \
-	-version-number 1:2 -no-undefined
+	-version-number $(GL_LIB_VERSION) -no-undefined
+
+#if USE_LIBGLVND_GLX
+#GL_LDFLAGS += -version-number 0
+#else
+#GL_LDFLAGS += -version-number 1:2
+#endif
 
 lib@GL_LIB@_la_SOURCES =
 lib@GL_LIB@_la_LIBADD = $(GL_LIBS)

@@ -304,6 +304,23 @@ if test "x$enable_debug" = xyes; then
     fi
 fi
 
+DEFAULT_GL_LIB_NAME=GL
+
+dnl
+dnl Libglvnd configuration
+dnl
+AC_ARG_ENABLE([libglvnd],
+    [AS_HELP_STRING([--enable-libglvnd],
+        [Build for libglvnd @<:@default=disabled@:>@])],
+    [enable_libglvnd="$enableval"],
+    [enable_libglvnd=no])
+AM_CONDITIONAL(USE_LIBGLVND_GLX, test "x$enable_libglvnd" = xyes)
+#AM_COND_IF([USE_LIBGLVND_GLX], [DEFINES="${DEFINES} -DUSE_LIBGLVND_GLX=1"])
+if test "x$enable_libglvnd" = xyes ; then
+    DEFINES="${DEFINES} -DUSE_LIBGLVND_GLX=1"
+    DEFAULT_GL_LIB_NAME=GLX_mesa
+fi
+
 dnl
 dnl library names
 dnl
@@ -330,13 +347,13 @@ AC_ARG_WITH([gl-lib-name],
   [AS_HELP_STRING([--with-gl-lib-name@<:@=NAME@:>@],
     [specify GL library name @<:@default=GL@:>@])],
   [GL_LIB=$withval],
-  [GL_LIB=GL])
+  [GL_LIB="$DEFAULT_GL_LIB_NAME"])
 AC_ARG_WITH([osmesa-lib-name],
   [AS_HELP_STRING([--with-osmesa-lib-name@<:@=NAME@:>@],
     [specify OSMesa library name @<:@default=OSMesa@:>@])],
   [OSMESA_LIB=$withval],
   [OSMESA_LIB=OSMesa])
-AS_IF([test "x$GL_LIB" = xyes], [GL_LIB=GL])
+AS_IF([test "x$GL_LIB" = xyes], [GL_LIB="$DEFAULT_GL_LIB_NAME"])
 AS_IF([test "x$OSMESA_LIB" = xyes], [OSMESA_LIB=OSMesa])
 
 dnl
@@ -1564,7 +1581,6 @@ AC_ARG_WITH([llvm-prefix],
         [Prefix for LLVM installations in non-standard locations])],
     [llvm_prefix="$withval"],
     [llvm_prefix=""])
-
 
 # Call this inside ` ` to get the return value.
 # $1 is the llvm-config command with arguments.
