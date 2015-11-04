@@ -132,19 +132,23 @@ typedef struct __GLXapiExportsRec {
     /*!
      * Looks up the screen and vendor for a context.
      *
-     * If no mapping is found, then \p retScreen and \p retVendor will be set
-     * to -1 and NULL, respectively.
+     * If no mapping is found, then \p retScreen will be set to -1, and
+     * \p retVendor and \p retDisplay will be set to NULL.
      *
-     * Either of \p retScreen or \p retVendor may be NULL if the screen or
-     * vendor are not required.
+     * \p retScreen, \p retVendor, and \p retDisplay may be NULL if the screen,
+     * vendor, or display are not required.
      *
-     * \param dpy The display connection.
+     * Note that this function does not take a display connection, since
+     * there are cases (e.g., glXGetContextIDEXT) that take a GLXContext but
+     * not a display. Instead, it will return the display that the context was
+     * created on.
+     *
      * \param context The context to look up.
      * \param[out] retScreen Returns the screen number.
      * \param[out] retVendor Returns the vendor.
      * \return Zero if a match was found, or non-zero if it was not.
      */
-    int (*vendorFromContext)(Display *dpy, GLXContext context, int *retScreen, __GLXvendorInfo **retVendor);
+    int (*vendorFromContext)(GLXContext context, Display **retDisplay, int *retScreen, __GLXvendorInfo **retVendor);
 
     void (*addScreenFBConfigMapping)(Display *dpy, GLXFBConfig config, int screen, __GLXvendorInfo *vendor);
     void (*removeScreenFBConfigMapping)(Display *dpy, GLXFBConfig config);
@@ -224,11 +228,27 @@ typedef struct __GLXapiImportsRec {
     void        (*setDispatchIndex)      (const GLubyte *procName, int index);
 
     /*!
-     * This notifies the vendor library when an X error should be generated
-     * due to a detected error in the GLX API stream.
+     * (OPTIONAL) This notifies the vendor library when an X error was
+     * generated due to a detected error in the GLX API stream.
+     *
+     * This may be \c NULL, in which case the vendor library is not notified of
+     * any errors.
+     *
+     * \note this is a notification only -- libGLX takes care of actually
+     * reporting the error.
+     *
+     * \param dpy The display connection.
+     * \param error The error code.
+     * \param resid The XID associated with the error, if any.
+     * \param opcode The minor opcode of the function that generated the error.
+     * \param coreX11error True if the error code is a core X11 error, or False
+     * if it's a GLX error code.
+     *
+     * \return True if libGLX should report the error to the application.
      */
-    void        (*notifyError)  (Display *dpy, char error,
-                                 char opcode, XID resid);
+    Bool        (*notifyError)  (Display *dpy, unsigned char error,
+                                 XID resid, unsigned char opcode,
+                                 Bool coreX11error);
 
     /*!
      * (OPTIONAL) Callbacks by which the vendor library may re-write libglvnd's

@@ -17,7 +17,7 @@ static inline int GET_CURRENT_SCREEN(void)
         return -1;
     }
 
-    __VND.vendorFromContext(glXGetCurrentDisplay(), context, &screen, NULL);
+    __VND.vendorFromContext(context, NULL, &screen, NULL);
     assert(screen >= 0);
 
     return screen;
@@ -84,16 +84,16 @@ static inline void GetDispatchFromDrawable(Display *dpy, GLXDrawable drawable,
 static inline void GetDispatchFromContext(Display *dpy, GLXContext ctx,
         int *retScreen, __GLXvendorInfo **retVendor)
 {
-    __VND.vendorFromContext(dpy, ctx, retScreen, retVendor);
+    __VND.vendorFromContext(ctx, NULL, retScreen, retVendor);
 }
 
 static inline __GLXvendorInfo *GetDispatchFromMultiContext(Display *dpy, GLXContext ctx1, GLXContext ctx2)
 {
     __GLXvendorInfo *vendor = NULL;
-    if (__VND.vendorFromContext(dpy, ctx1, NULL, &vendor) == 0) {
+    if (__VND.vendorFromContext(ctx1, NULL, NULL, &vendor) == 0) {
         return vendor;
     }
-    if (__VND.vendorFromContext(dpy, ctx2, NULL, &vendor) == 0) {
+    if (__VND.vendorFromContext(ctx2, NULL, NULL, &vendor) == 0) {
         return vendor;
     }
     return __VND.getCurrentDynDispatch();

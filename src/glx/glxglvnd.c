@@ -59,18 +59,13 @@ static void __glXGLVNDSetDispatchIndex(const GLubyte *procName, int index)
     }
 }
 
-static void __glXGLVNDNotifyError(Display *dpy, char error, char opcode, XID resid)
-{
-    __glXSendError(dpy, error, resid, opcode, True);
-}
-
 static __GLXapiImports glvndImports =
 {
     __glXGLVNDSupportsScreen, // checkSupportsScreen
     __glXGLVNDGetProcAddress, // getProcAddress
     __glXGLVNDGetDispatchAddress, // getDispatchAddress
     __glXGLVNDSetDispatchIndex, // setDispatchIndex
-    __glXGLVNDNotifyError, // notifyError
+    NULL, // notifyError
     NULL // patchCallbacks
 };
 
