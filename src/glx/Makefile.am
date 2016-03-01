@@ -105,7 +105,7 @@ endif
 if USE_LIBGLVND_GLX
 AM_CFLAGS += \
 	-DGL_LIB_NAME=\"lib@GL_LIB@.so.0\" \
-	-I$(top_srcdir)/include/libglvnd
+	$(GLVND_CFLAGS)
 
 libglx_la_SOURCES += \
           glxglvnd.c \
@@ -129,12 +129,6 @@ GL_LIBS = \
 GL_LDFLAGS = \
 	-Wl,-Bsymbolic \
 	-version-number $(GL_LIB_VERSION) -no-undefined
-
-#if USE_LIBGLVND_GLX
-#GL_LDFLAGS += -version-number 0
-#else
-#GL_LDFLAGS += -version-number 1:2
-#endif
 
 lib@GL_LIB@_la_SOURCES =
 lib@GL_LIB@_la_LIBADD = $(GL_LIBS)

@@ -7,8 +7,9 @@
 #include <X11/Xlib.h>
 #include <X11/Xlibint.h>
 
+#include "glvnd/libglxabi.h"
+
 #include "glx_error.h"
-#include "libglxabi.h"
 #include "glxglvnd.h"
 
 #include <assert.h>

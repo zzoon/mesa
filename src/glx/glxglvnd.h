@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-#include "libglxabi.h"
+#include "glvnd/libglxabi.h"
 
 extern __GLXapiExports __glXGLVNDAPIExports;
 

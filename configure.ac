@@ -317,6 +317,7 @@ AC_ARG_ENABLE([libglvnd],
 AM_CONDITIONAL(USE_LIBGLVND_GLX, test "x$enable_libglvnd" = xyes)
 #AM_COND_IF([USE_LIBGLVND_GLX], [DEFINES="${DEFINES} -DUSE_LIBGLVND_GLX=1"])
 if test "x$enable_libglvnd" = xyes ; then
+    PKG_CHECK_MODULES([GLVND], libglvnd)
     DEFINES="${DEFINES} -DUSE_LIBGLVND_GLX=1"
     DEFAULT_GL_LIB_NAME=GLX_mesa
 fi
