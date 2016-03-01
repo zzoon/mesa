@@ -31,12 +31,10 @@ static void *__glXGLVNDGetProcAddress(const GLubyte *procName)
 static int FindGLXFunction(const GLubyte *name)
 {
     int i;
-    for (i=0; i<DI_FUNCTION_COUNT; i++)
-    {
+
+    for (i = 0; i < DI_FUNCTION_COUNT; i++) {
         if (strcmp((const char *) name, __glXDispatchTableStrings[i]) == 0)
-        {
             return i;
-        }
     }
     return -1;
 }
@@ -44,24 +42,22 @@ static int FindGLXFunction(const GLubyte *name)
 static void *__glXGLVNDGetDispatchAddress(const GLubyte *procName)
 {
     int internalIndex = FindGLXFunction(procName);
-    if (internalIndex >= 0)
-    {
+
+    if (internalIndex >= 0) {
         return __glXDispatchFunctions[internalIndex];
-    }
+
     return NULL;
 }
 
 static void __glXGLVNDSetDispatchIndex(const GLubyte *procName, int index)
 {
     int internalIndex = FindGLXFunction(procName);
+
     if (internalIndex >= 0)
-    {
         __glXDispatchTableIndices[internalIndex] = index;
-    }
 }
 
-static __GLXapiImports glvndImports =
-{
+static __GLXapiImports glvndImports = {
     __glXGLVNDSupportsScreen, // checkSupportsScreen
     __glXGLVNDGetProcAddress, // getProcAddress
     __glXGLVNDGetDispatchAddress, // getDispatchAddress
@@ -72,14 +68,10 @@ static __GLXapiImports glvndImports =
 
 __GLX_MAIN_PROTO(version, exports, vendorName)
 {
-
     if (version != GLX_VENDOR_ABI_VERSION)
-    {
         return NULL;
-    }
 
-    if (!initDone)
-    {
+    if (!initDone) {
         initDone = True;
         __glXGLVNDInitDispatchFunctions();
         memcpy(&__glXGLVNDAPIExports, exports, sizeof(*exports));
@@ -87,4 +79,3 @@ __GLX_MAIN_PROTO(version, exports, vendorName)
 
     return &glvndImports;
 }
-
