@@ -315,8 +315,18 @@ AC_ARG_ENABLE([libglvnd],
     [enable_libglvnd="$enableval"],
     [enable_libglvnd=no])
 AM_CONDITIONAL(USE_LIBGLVND_GLX, test "x$enable_libglvnd" = xyes)
-#AM_COND_IF([USE_LIBGLVND_GLX], [DEFINES="${DEFINES} -DUSE_LIBGLVND_GLX=1"])
 if test "x$enable_libglvnd" = xyes ; then
+    dnl XXX: update once we can handle more than libGL/glx.
+    dnl Namely: we should error out if neither of the glvnd enabled libraries
+    dnl are built
+    if test "x$enable_glx" = xno; then
+        AC_MSG_ERROR([cannot build libglvnd without GLX])
+    fi
+
+    if test "x$enable_xlib_glx" = xyes; then
+        AC_MSG_ERROR([cannot build libgvnd when Xlib-GLX is enabled])
+    fi
+
     PKG_CHECK_MODULES([GLVND], libglvnd)
     DEFINES="${DEFINES} -DUSE_LIBGLVND_GLX=1"
     DEFAULT_GL_LIB_NAME=GLX_mesa
