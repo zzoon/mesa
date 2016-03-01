@@ -18,14 +18,14 @@ static inline Display *GET_DEFAULT_DISPLAY(void)
 }
 
 static inline void AddFBConfigMapping(Display *dpy, GLXFBConfig config,
-                                      int screen, __GLXvendorInfo *vendor)
+                                      __GLXvendorInfo *vendor)
 {
-    __VND.addScreenFBConfigMapping(dpy, config, screen, vendor);
+    __VND.addVendorFBConfigMapping(dpy, config, vendor);
 }
 
-static inline void AddScreenFBConfigsMapping(Display *dpy, const GLXFBConfig *ret,
+static inline void AddFBConfigsMapping(Display *dpy, const GLXFBConfig *ret,
                                              int *nelements,
-                                             int screen, __GLXvendorInfo *vendor)
+                                             __GLXvendorInfo *vendor)
 {
     int i;
 
@@ -33,7 +33,7 @@ static inline void AddScreenFBConfigsMapping(Display *dpy, const GLXFBConfig *re
         return;
 
     for (i = 0; i < *nelements; i++)
-        __VND.addScreenFBConfigMapping(dpy, ret[i], screen, vendor);
+        __VND.addVendorFBConfigMapping(dpy, ret[i], vendor);
 }
 
 static inline void AddVisualMapping(Display *dpy, const XVisualInfo *visual,
@@ -67,9 +67,9 @@ static inline void GetDispatchFromContext(Display *dpy, GLXContext ctx,
 }
 
 static inline void GetDispatchFromFBConfig(Display *dpy, GLXFBConfig config,
-                                           int *retScreen, __GLXvendorInfo **retVendor)
+                                           __GLXvendorInfo **retVendor)
 {
-    __VND.vendorFromFBConfig(dpy, config, retScreen, retVendor);
+    __VND.vendorFromFBConfig(dpy, config, retVendor);
 }
 
 static inline void GetDispatchFromVisual(Display *dpy, const XVisualInfo *visual,

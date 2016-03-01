@@ -134,12 +134,10 @@ static GLXFBConfigSGIX * dispatch_ChooseFBConfigSGIX(Display * dpy, int screen, 
     typedef GLXFBConfigSGIX * (*fn_ChooseFBConfigSGIX_ptr)(Display * dpy, int screen, const int * attrib_list, int * nelements);
     fn_ChooseFBConfigSGIX_ptr pChooseFBConfigSGIX;
     __GLXvendorInfo *dd = NULL;
-    int disp_screen;
     GLXFBConfigSGIX * ret = NULL;
 
 
     dd = __VND.getDynDispatch(dpy, screen);
-    disp_screen = screen;
     pChooseFBConfigSGIX = (fn_ChooseFBConfigSGIX_ptr)(dd ?
         __VND.fetchDispatchEntry(dd,
              __glXDispatchTableIndices[DI_ChooseFBConfigSGIX]) :
@@ -148,7 +146,7 @@ static GLXFBConfigSGIX * dispatch_ChooseFBConfigSGIX(Display * dpy, int screen, 
         ret = (*pChooseFBConfigSGIX)(dpy, screen, attrib_list, nelements);
     }
 
-    AddScreenFBConfigsMapping(dpy, ret, nelements, disp_screen, dd);
+    AddFBConfigsMapping(dpy, ret, nelements, dd);
 
     return ret;
 
@@ -162,11 +160,10 @@ static GLXContext dispatch_CreateContextAttribsARB(Display * dpy, GLXFBConfig co
     typedef GLXContext (*fn_CreateContextAttribsARB_ptr)(Display * dpy, GLXFBConfig config, GLXContext share_list, Bool direct, const int * attrib_list);
     fn_CreateContextAttribsARB_ptr pCreateContextAttribsARB;
     __GLXvendorInfo *dd = NULL;
-    int disp_screen;
     GLXContext ret = None;
 
 
-    GetDispatchFromFBConfig(dpy, config, &disp_screen, &dd);
+    GetDispatchFromFBConfig(dpy, config, &dd);
     pCreateContextAttribsARB = (fn_CreateContextAttribsARB_ptr)(dd ?
         __VND.fetchDispatchEntry(dd,
              __glXDispatchTableIndices[DI_CreateContextAttribsARB]) :
@@ -189,11 +186,10 @@ static GLXContext dispatch_CreateContextWithConfigSGIX(Display * dpy, GLXFBConfi
     typedef GLXContext (*fn_CreateContextWithConfigSGIX_ptr)(Display * dpy, GLXFBConfigSGIX config, int render_type, GLXContext share_list, Bool direct);
     fn_CreateContextWithConfigSGIX_ptr pCreateContextWithConfigSGIX;
     __GLXvendorInfo *dd = NULL;
-    int disp_screen;
     GLXContext ret = None;
 
 
-    GetDispatchFromFBConfig(dpy, config, &disp_screen, &dd);
+    GetDispatchFromFBConfig(dpy, config, &dd);
     pCreateContextWithConfigSGIX = (fn_CreateContextWithConfigSGIX_ptr)(dd ?
         __VND.fetchDispatchEntry(dd,
              __glXDispatchTableIndices[DI_CreateContextWithConfigSGIX]) :
@@ -216,11 +212,10 @@ static GLXPbuffer dispatch_CreateGLXPbufferSGIX(Display * dpy, GLXFBConfig confi
     typedef GLXPbuffer (*fn_CreateGLXPbufferSGIX_ptr)(Display * dpy, GLXFBConfig config, unsigned int width, unsigned int height, const int * attrib_list);
     fn_CreateGLXPbufferSGIX_ptr pCreateGLXPbufferSGIX;
     __GLXvendorInfo *dd = NULL;
-    int disp_screen;
     GLXPbuffer ret = None;
 
 
-    GetDispatchFromFBConfig(dpy, config, &disp_screen, &dd);
+    GetDispatchFromFBConfig(dpy, config, &dd);
     pCreateGLXPbufferSGIX = (fn_CreateGLXPbufferSGIX_ptr)(dd ?
         __VND.fetchDispatchEntry(dd,
              __glXDispatchTableIndices[DI_CreateGLXPbufferSGIX]) :
@@ -243,11 +238,10 @@ static GLXPixmap dispatch_CreateGLXPixmapWithConfigSGIX(Display * dpy, GLXFBConf
     typedef GLXPixmap (*fn_CreateGLXPixmapWithConfigSGIX_ptr)(Display * dpy, GLXFBConfigSGIX config, Pixmap pixmap);
     fn_CreateGLXPixmapWithConfigSGIX_ptr pCreateGLXPixmapWithConfigSGIX;
     __GLXvendorInfo *dd = NULL;
-    int disp_screen;
     GLXPixmap ret = None;
 
 
-    GetDispatchFromFBConfig(dpy, config, &disp_screen, &dd);
+    GetDispatchFromFBConfig(dpy, config, &dd);
     pCreateGLXPixmapWithConfigSGIX = (fn_CreateGLXPixmapWithConfigSGIX_ptr)(dd ?
         __VND.fetchDispatchEntry(dd,
              __glXDispatchTableIndices[DI_CreateGLXPixmapWithConfigSGIX]) :
@@ -347,7 +341,7 @@ static int dispatch_GetFBConfigAttribSGIX(Display * dpy, GLXFBConfigSGIX config,
     int ret = GLX_NO_EXTENSION;
 
 
-    GetDispatchFromFBConfig(dpy, config, NULL, &dd);
+    GetDispatchFromFBConfig(dpy, config, &dd);
     pGetFBConfigAttribSGIX = (fn_GetFBConfigAttribSGIX_ptr)(dd ?
         __VND.fetchDispatchEntry(dd,
              __glXDispatchTableIndices[DI_GetFBConfigAttribSGIX]) :
@@ -368,12 +362,10 @@ static GLXFBConfigSGIX dispatch_GetFBConfigFromVisualSGIX(Display * dpy, XVisual
     typedef GLXFBConfigSGIX (*fn_GetFBConfigFromVisualSGIX_ptr)(Display * dpy, XVisualInfo * vis);
     fn_GetFBConfigFromVisualSGIX_ptr pGetFBConfigFromVisualSGIX;
     __GLXvendorInfo *dd = NULL;
-    int disp_screen;
     GLXFBConfigSGIX ret = NULL;
 
 
     GetDispatchFromVisual(dpy, vis, &dd);
-    disp_screen = vis->screen;
     pGetFBConfigFromVisualSGIX = (fn_GetFBConfigFromVisualSGIX_ptr)(dd ?
         __VND.fetchDispatchEntry(dd,
              __glXDispatchTableIndices[DI_GetFBConfigFromVisualSGIX]) :
@@ -382,7 +374,7 @@ static GLXFBConfigSGIX dispatch_GetFBConfigFromVisualSGIX(Display * dpy, XVisual
         ret = (*pGetFBConfigFromVisualSGIX)(dpy, vis);
     }
 
-    AddFBConfigMapping(dpy, ret, disp_screen, dd);
+    AddFBConfigMapping(dpy, ret, dd);
 
     return ret;
 
@@ -450,7 +442,7 @@ static XVisualInfo * dispatch_GetVisualFromFBConfigSGIX(Display * dpy, GLXFBConf
     XVisualInfo * ret = NULL;
 
 
-    GetDispatchFromFBConfig(dpy, config, NULL, &dd);
+    GetDispatchFromFBConfig(dpy, config, &dd);
     pGetVisualFromFBConfigSGIX = (fn_GetVisualFromFBConfigSGIX_ptr)(dd ?
         __VND.fetchDispatchEntry(dd,
              __glXDispatchTableIndices[DI_GetVisualFromFBConfigSGIX]) :
