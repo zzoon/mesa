@@ -16,8 +16,6 @@
 
 _X_EXPORT __GLX_MAIN_PROTO(version, exports, vendorName);
 
-static Bool initDone = False;
-
 static Bool __glXGLVNDSupportsScreen(Display *dpy, int screen)
 {
     return True;
@@ -68,6 +66,8 @@ static __GLXapiImports glvndImports = {
 
 __GLX_MAIN_PROTO(version, exports, vendorName)
 {
+    static Bool initDone = False;
+
     if (version != GLX_VENDOR_ABI_VERSION)
         return NULL;
 
