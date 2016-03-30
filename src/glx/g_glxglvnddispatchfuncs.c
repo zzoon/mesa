@@ -37,7 +37,7 @@ const char * const __glXDispatchTableStrings[DI_LAST_INDEX] = {
     // glXDestroyPbuffer implemented by libglvnd
     // glXDestroyPixmap implemented by libglvnd
     // glXDestroyWindow implemented by libglvnd
-    __ATTRIB(FreeContextEXT),
+    // glXFreeContextEXT implemented by libglvnd
     // glXGetClientString implemented by libglvnd
     // glXGetConfig implemented by libglvnd
     __ATTRIB(GetContextIDEXT),
@@ -59,7 +59,7 @@ const char * const __glXDispatchTableStrings[DI_LAST_INDEX] = {
 #endif // defined(GLX_SGI_video_sync)
     // glXGetVisualFromFBConfig implemented by libglvnd
     __ATTRIB(GetVisualFromFBConfigSGIX),
-    __ATTRIB(ImportContextEXT),
+    // glXImportContextEXT implemented by libglvnd
     // glXIsDirect implemented by libglvnd
     // glXMakeContextCurrent implemented by libglvnd
     // glXMakeCurrent implemented by libglvnd
@@ -285,27 +285,6 @@ static void dispatch_DestroyGLXPbufferSGIX(Display * dpy, GLXPbuffer pbuf)
 
 
 
-static void dispatch_FreeContextEXT(Display * dpy, GLXContext ctx)
-{
-
-    typedef void (*fn_FreeContextEXT_ptr)(Display * dpy, GLXContext ctx);
-    fn_FreeContextEXT_ptr pFreeContextEXT;
-    __GLXvendorInfo *dd = NULL;
-
-
-    GetDispatchFromContext(dpy, ctx, NULL, &dd);
-    pFreeContextEXT = (fn_FreeContextEXT_ptr)(dd ?
-        __VND.fetchDispatchEntry(dd,
-             __glXDispatchTableIndices[DI_FreeContextEXT]) :
-        NULL);
-    if (pFreeContextEXT) {
-        (*pFreeContextEXT)(dpy, ctx);
-    }
-
-}
-
-
-
 static GLXContextID dispatch_GetContextIDEXT(const GLXContext ctx)
 {
 
@@ -481,30 +460,6 @@ static XVisualInfo * dispatch_GetVisualFromFBConfigSGIX(Display * dpy, GLXFBConf
     }
 
     AddVisualMapping(dpy, ret, dd);
-
-    return ret;
-
-}
-
-
-
-static GLXContext dispatch_ImportContextEXT(Display * dpy, GLXContextID contextID)
-{
-
-    typedef GLXContext (*fn_ImportContextEXT_ptr)(Display * dpy, GLXContextID contextID);
-    fn_ImportContextEXT_ptr pImportContextEXT;
-    __GLXvendorInfo *dd = NULL;
-    GLXContext ret = None;
-
-
-    dd = __VND.getDynDispatch(dpy, GET_DEFAULT_SCREEN());
-    pImportContextEXT = (fn_ImportContextEXT_ptr)(dd ?
-        __VND.fetchDispatchEntry(dd,
-             __glXDispatchTableIndices[DI_ImportContextEXT]) :
-        NULL);
-    if (pImportContextEXT) {
-        ret = (*pImportContextEXT)(dpy, contextID);
-    }
 
     return ret;
 
@@ -1112,7 +1067,6 @@ void __glXGLVNDInitDispatchFunctions(void)
     __glXDispatchFunctions[DI_CreateGLXPbufferSGIX] = (void *)dispatch_CreateGLXPbufferSGIX;
     __glXDispatchFunctions[DI_CreateGLXPixmapWithConfigSGIX] = (void *)dispatch_CreateGLXPixmapWithConfigSGIX;
     __glXDispatchFunctions[DI_DestroyGLXPbufferSGIX] = (void *)dispatch_DestroyGLXPbufferSGIX;
-    __glXDispatchFunctions[DI_FreeContextEXT] = (void *)dispatch_FreeContextEXT;
     __glXDispatchFunctions[DI_GetContextIDEXT] = (void *)dispatch_GetContextIDEXT;
     __glXDispatchFunctions[DI_GetCurrentDisplayEXT] = (void *)dispatch_GetCurrentDisplayEXT;
     __glXDispatchFunctions[DI_GetFBConfigAttribSGIX] = (void *)dispatch_GetFBConfigAttribSGIX;
@@ -1122,7 +1076,6 @@ void __glXGLVNDInitDispatchFunctions(void)
     __glXDispatchFunctions[DI_GetVideoSyncSGI] = (void *)dispatch_GetVideoSyncSGI;
 #endif // defined(GLX_SGI_video_sync)
     __glXDispatchFunctions[DI_GetVisualFromFBConfigSGIX] = (void *)dispatch_GetVisualFromFBConfigSGIX;
-    __glXDispatchFunctions[DI_ImportContextEXT] = (void *)dispatch_ImportContextEXT;
     __glXDispatchFunctions[DI_QueryContextInfoEXT] = (void *)dispatch_QueryContextInfoEXT;
     __glXDispatchFunctions[DI_QueryGLXPbufferSGIX] = (void *)dispatch_QueryGLXPbufferSGIX;
     __glXDispatchFunctions[DI_ReleaseTexImageEXT] = (void *)dispatch_ReleaseTexImageEXT;

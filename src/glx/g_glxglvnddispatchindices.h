@@ -27,7 +27,7 @@ typedef enum __GLXdispatchIndex {
     // DestroyPbuffer implemented by libglvnd
     // DestroyPixmap implemented by libglvnd
     // DestroyWindow implemented by libglvnd
-    DI_FreeContextEXT,
+    // FreeContextEXT implemented by libglvnd
     // GetClientString implemented by libglvnd
     // GetConfig implemented by libglvnd
     DI_GetContextIDEXT,
@@ -49,7 +49,7 @@ typedef enum __GLXdispatchIndex {
 #endif // defined(GLX_SGI_video_sync)
     // GetVisualFromFBConfig implemented by libglvnd
     DI_GetVisualFromFBConfigSGIX,
-    DI_ImportContextEXT,
+    // ImportContextEXT implemented by libglvnd
     // IsDirect implemented by libglvnd
     // MakeContextCurrent implemented by libglvnd
     // MakeCurrent implemented by libglvnd
