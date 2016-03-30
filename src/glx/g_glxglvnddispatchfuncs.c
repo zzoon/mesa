@@ -12,93 +12,99 @@ int __glXDispatchTableIndices[DI_LAST_INDEX];
 void *__glXDispatchFunctions[DI_LAST_INDEX];
 __GLXapiExports __glXGLVNDAPIExports;
 
-const char *__glXDispatchTableStrings[DI_LAST_INDEX] = {
-"glXBindTexImageEXT",
-// glXChooseFBConfig implemented by libglvnd
-"glXChooseFBConfigSGIX",
-// glXChooseVisual implemented by libglvnd
-// glXCopyContext implemented by libglvnd
-// glXCreateContext implemented by libglvnd
-"glXCreateContextAttribsARB",
-"glXCreateContextWithConfigSGIX",
-"glXCreateGLXPbufferSGIX",
-// glXCreateGLXPixmap implemented by libglvnd
-"glXCreateGLXPixmapWithConfigSGIX",
-// glXCreateNewContext implemented by libglvnd
-// glXCreatePbuffer implemented by libglvnd
-// glXCreatePixmap implemented by libglvnd
-// glXCreateWindow implemented by libglvnd
-// glXDestroyContext implemented by libglvnd
-"glXDestroyGLXPbufferSGIX",
-// glXDestroyGLXPixmap implemented by libglvnd
-// glXDestroyPbuffer implemented by libglvnd
-// glXDestroyPixmap implemented by libglvnd
-// glXDestroyWindow implemented by libglvnd
-"glXFreeContextEXT",
-// glXGetClientString implemented by libglvnd
-// glXGetConfig implemented by libglvnd
-"glXGetContextIDEXT",
-// glXGetCurrentContext implemented by libglvnd
-// glXGetCurrentDisplay implemented by libglvnd
-"glXGetCurrentDisplayEXT",
-// glXGetCurrentDrawable implemented by libglvnd
-// glXGetCurrentReadDrawable implemented by libglvnd
-// glXGetFBConfigAttrib implemented by libglvnd
-"glXGetFBConfigAttribSGIX",
-"glXGetFBConfigFromVisualSGIX",
-// glXGetFBConfigs implemented by libglvnd
-// glXGetProcAddress implemented by libglvnd
-// glXGetProcAddressARB implemented by libglvnd
-// glXGetSelectedEvent implemented by libglvnd
-"glXGetSelectedEventSGIX",
+const char * const __glXDispatchTableStrings[DI_LAST_INDEX] = {
+#define __ATTRIB(field) \
+    [DI_##field] = "glX"#field
+
+    __ATTRIB(BindTexImageEXT),
+    // glXChooseFBConfig implemented by libglvnd
+    __ATTRIB(ChooseFBConfigSGIX),
+    // glXChooseVisual implemented by libglvnd
+    // glXCopyContext implemented by libglvnd
+    // glXCreateContext implemented by libglvnd
+    __ATTRIB(CreateContextAttribsARB),
+    __ATTRIB(CreateContextWithConfigSGIX),
+    __ATTRIB(CreateGLXPbufferSGIX),
+    // glXCreateGLXPixmap implemented by libglvnd
+    __ATTRIB(CreateGLXPixmapWithConfigSGIX),
+    // glXCreateNewContext implemented by libglvnd
+    // glXCreatePbuffer implemented by libglvnd
+    // glXCreatePixmap implemented by libglvnd
+    // glXCreateWindow implemented by libglvnd
+    // glXDestroyContext implemented by libglvnd
+    __ATTRIB(DestroyGLXPbufferSGIX),
+    // glXDestroyGLXPixmap implemented by libglvnd
+    // glXDestroyPbuffer implemented by libglvnd
+    // glXDestroyPixmap implemented by libglvnd
+    // glXDestroyWindow implemented by libglvnd
+    __ATTRIB(FreeContextEXT),
+    // glXGetClientString implemented by libglvnd
+    // glXGetConfig implemented by libglvnd
+    __ATTRIB(GetContextIDEXT),
+    // glXGetCurrentContext implemented by libglvnd
+    // glXGetCurrentDisplay implemented by libglvnd
+    __ATTRIB(GetCurrentDisplayEXT),
+    // glXGetCurrentDrawable implemented by libglvnd
+    // glXGetCurrentReadDrawable implemented by libglvnd
+    // glXGetFBConfigAttrib implemented by libglvnd
+    __ATTRIB(GetFBConfigAttribSGIX),
+    __ATTRIB(GetFBConfigFromVisualSGIX),
+    // glXGetFBConfigs implemented by libglvnd
+    // glXGetProcAddress implemented by libglvnd
+    // glXGetProcAddressARB implemented by libglvnd
+    // glXGetSelectedEvent implemented by libglvnd
+    __ATTRIB(GetSelectedEventSGIX),
 #if defined(GLX_SGI_video_sync)
-"glXGetVideoSyncSGI",
+    __ATTRIB(GetVideoSyncSGI),
 #endif // defined(GLX_SGI_video_sync)
-// glXGetVisualFromFBConfig implemented by libglvnd
-"glXGetVisualFromFBConfigSGIX",
-"glXImportContextEXT",
-// glXIsDirect implemented by libglvnd
-// glXMakeContextCurrent implemented by libglvnd
-// glXMakeCurrent implemented by libglvnd
-// glXQueryContext implemented by libglvnd
-"glXQueryContextInfoEXT",
-// glXQueryDrawable implemented by libglvnd
-// glXQueryExtension implemented by libglvnd
-// glXQueryExtensionsString implemented by libglvnd
-"glXQueryGLXPbufferSGIX",
-// glXQueryServerString implemented by libglvnd
-// glXQueryVersion implemented by libglvnd
-"glXReleaseTexImageEXT",
-// glXSelectEvent implemented by libglvnd
-"glXSelectEventSGIX",
-// glXSwapBuffers implemented by libglvnd
+    // glXGetVisualFromFBConfig implemented by libglvnd
+    __ATTRIB(GetVisualFromFBConfigSGIX),
+    __ATTRIB(ImportContextEXT),
+    // glXIsDirect implemented by libglvnd
+    // glXMakeContextCurrent implemented by libglvnd
+    // glXMakeCurrent implemented by libglvnd
+    // glXQueryContext implemented by libglvnd
+    __ATTRIB(QueryContextInfoEXT),
+    // glXQueryDrawable implemented by libglvnd
+    // glXQueryExtension implemented by libglvnd
+    // glXQueryExtensionsString implemented by libglvnd
+    __ATTRIB(QueryGLXPbufferSGIX),
+    // glXQueryServerString implemented by libglvnd
+    // glXQueryVersion implemented by libglvnd
+    __ATTRIB(ReleaseTexImageEXT),
+    // glXSelectEvent implemented by libglvnd
+    __ATTRIB(SelectEventSGIX),
+    // glXSwapBuffers implemented by libglvnd
 #if defined(GLX_SGI_swap_control)
-"glXSwapIntervalSGI",
+    __ATTRIB(SwapIntervalSGI),
 #endif // defined(GLX_SGI_swap_control)
-// glXUseXFont implemented by libglvnd
-// glXWaitGL implemented by libglvnd
+    // glXUseXFont implemented by libglvnd
+    // glXWaitGL implemented by libglvnd
 #if defined(GLX_SGI_video_sync)
-"glXWaitVideoSyncSGI",
+    __ATTRIB(WaitVideoSyncSGI),
 #endif // defined(GLX_SGI_video_sync)
-// glXWaitX implemented by libglvnd
-"glXglXBindSwapBarrierSGIX",
-"glXglXCopySubBufferMESA",
-"glXglXCreateGLXPixmapMESA",
-"glXglXGetMscRateOML",
-"glXglXGetScreenDriver",
-"glXglXGetSwapIntervalMESA",
-"glXglXGetSyncValuesOML",
-"glXglXJoinSwapGroupSGIX",
-"glXglXQueryCurrentRendererIntegerMESA",
-"glXglXQueryCurrentRendererStringMESA",
-"glXglXQueryMaxSwapBarriersSGIX",
-"glXglXQueryRendererIntegerMESA",
-"glXglXQueryRendererStringMESA",
-"glXglXReleaseBuffersMESA",
-"glXglXSwapBuffersMscOML",
-"glXglXSwapIntervalMESA",
-"glXglXWaitForMscOML",
-"glXglXWaitForSbcOML",
+    // glXWaitX implemented by libglvnd
+
+    __ATTRIB(glXBindSwapBarrierSGIX),
+    __ATTRIB(glXCopySubBufferMESA),
+    __ATTRIB(glXCreateGLXPixmapMESA),
+    __ATTRIB(glXGetMscRateOML),
+    __ATTRIB(glXGetScreenDriver),
+    __ATTRIB(glXGetSwapIntervalMESA),
+    __ATTRIB(glXGetSyncValuesOML),
+    __ATTRIB(glXJoinSwapGroupSGIX),
+    __ATTRIB(glXQueryCurrentRendererIntegerMESA),
+    __ATTRIB(glXQueryCurrentRendererStringMESA),
+    __ATTRIB(glXQueryMaxSwapBarriersSGIX),
+    __ATTRIB(glXQueryRendererIntegerMESA),
+    __ATTRIB(glXQueryRendererStringMESA),
+    __ATTRIB(glXReleaseBuffersMESA),
+    __ATTRIB(glXSwapBuffersMscOML),
+    __ATTRIB(glXSwapIntervalMESA),
+    __ATTRIB(glXWaitForMscOML),
+    __ATTRIB(glXWaitForSbcOML),
+
+#undef __ATTRIB
 };
 
 static void dispatch_BindTexImageEXT(Display * dpy, GLXDrawable drawable, int buffer, const int * attrib_list)

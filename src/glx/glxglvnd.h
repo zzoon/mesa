@@ -9,7 +9,7 @@ extern const int DI_FUNCTION_COUNT;
 
 extern void *__glXDispatchFunctions[];
 extern int __glXDispatchTableIndices[];
-extern const char *__glXDispatchTableStrings[];
+extern const char * const __glXDispatchTableStrings[];
 
 extern void __glXGLVNDInitDispatchFunctions(void);
 
