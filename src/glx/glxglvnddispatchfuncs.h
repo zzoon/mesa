@@ -8,25 +8,6 @@
 
 #define __VND __glXGLVNDAPIExports
 
-static inline int GET_CURRENT_SCREEN(void)
-{
-    GLXContext context = __VND.getCurrentContext();
-    int screen = -1;
-
-    if (!context)
-        return -1;
-
-    __VND.vendorFromContext(context, NULL, &screen, NULL);
-    assert(screen >= 0);
-
-    return screen;
-}
-
-static inline int GET_DEFAULT_SCREEN(void)
-{
-    return 0;
-}
-
 #define GET_CURRENT_DISPLAY() glXGetCurrentDisplay()
 
 static inline Display *GET_DEFAULT_DISPLAY(void)
