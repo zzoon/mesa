@@ -69,7 +69,10 @@ __GLX_MAIN_PROTO(version, exports, vendorName)
 {
     static Bool initDone = False;
 
-    if (version != GLX_VENDOR_ABI_VERSION)
+    if (GLX_VENDOR_ABI_GET_MAJOR_VERSION(version) !=
+        GLX_VENDOR_ABI_GET_MAJOR_VERSION(GLX_VENDOR_ABI_VERSION) ||
+        GLX_VENDOR_ABI_GET_MINOR_VERSION(version) <
+        GLX_VENDOR_ABI_GET_MINOR_VERSION(GLX_VENDOR_ABI_VERSION))
         return NULL;
 
     if (!initDone) {
