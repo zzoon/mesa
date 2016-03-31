@@ -327,7 +327,7 @@ if test "x$enable_libglvnd" = xyes ; then
         AC_MSG_ERROR([cannot build libgvnd when Xlib-GLX is enabled])
     fi
 
-    PKG_CHECK_MODULES([GLVND], libglvnd)
+    PKG_CHECK_MODULES([GLVND], libglvnd >= 0.1.0)
     DEFINES="${DEFINES} -DUSE_LIBGLVND_GLX=1"
     DEFAULT_GL_LIB_NAME=GLX_mesa
 fi
