@@ -18,6 +18,7 @@ _X_EXPORT __GLX_MAIN_PROTO(version, exports, vendorName);
 
 static Bool __glXGLVNDIsScreenSupported(Display *dpy, int screen)
 {
+    /* TODO: Think of a better heuristic... */
     return True;
 }
 
