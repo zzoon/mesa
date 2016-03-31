@@ -14,8 +14,6 @@
 
 #include <assert.h>
 
-_X_EXPORT __GLX_MAIN_PROTO(version, exports, vendorName);
-
 static Bool __glXGLVNDIsScreenSupported(Display *dpy, int screen)
 {
     /* TODO: Think of a better heuristic... */
@@ -65,7 +63,9 @@ static __GLXapiImports glvndImports = {
     NULL // patchCallbacks
 };
 
-__GLX_MAIN_PROTO(version, exports, vendorName)
+_X_EXPORT const __GLXapiImports *__glx_Main(uint32_t version,
+                                            const __GLXapiExports *exports,
+                                            __GLXvendorInfo *vendor);
 {
     static Bool initDone = False;
 
