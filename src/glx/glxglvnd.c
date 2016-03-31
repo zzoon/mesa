@@ -60,9 +60,9 @@ _X_EXPORT Bool __glx_Main(uint32_t version, const __GLXapiExports *exports,
     static Bool initDone = False;
 
     if (GLX_VENDOR_ABI_GET_MAJOR_VERSION(version) !=
-        GLX_VENDOR_ABI_GET_MAJOR_VERSION(GLX_VENDOR_ABI_VERSION) ||
+        GLX_VENDOR_ABI_MAJOR_VERSION ||
         GLX_VENDOR_ABI_GET_MINOR_VERSION(version) <
-        GLX_VENDOR_ABI_GET_MINOR_VERSION(GLX_VENDOR_ABI_VERSION))
+        GLX_VENDOR_ABI_MINOR_VERSION)
         return False;
 
     if (!initDone) {
