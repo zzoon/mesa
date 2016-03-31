@@ -17,23 +17,29 @@ static inline Display *GET_DEFAULT_DISPLAY(void)
     return GET_CURRENT_DISPLAY();
 }
 
-static inline void AddFBConfigMapping(Display *dpy, GLXFBConfig config,
-                                      __GLXvendorInfo *vendor)
+static inline int AddFBConfigMapping(Display *dpy, GLXFBConfig config,
+                                     __GLXvendorInfo *vendor)
 {
-    __VND.addVendorFBConfigMapping(dpy, config, vendor);
+    return __VND.addVendorFBConfigMapping(dpy, config, vendor);
 }
 
-static inline void AddFBConfigsMapping(Display *dpy, const GLXFBConfig *ret,
-                                             int *nelements,
-                                             __GLXvendorInfo *vendor)
+static inline int AddFBConfigsMapping(Display *dpy, const GLXFBConfig *ret,
+                                      int *nelements, __GLXvendorInfo *vendor)
 {
-    int i;
+    int i, r;
 
     if (!nelements || !ret)
-        return;
+        return 0;
 
-    for (i = 0; i < *nelements; i++)
-        __VND.addVendorFBConfigMapping(dpy, ret[i], vendor);
+    for (i = 0; i < *nelements; i++) {
+        r = __VND.addVendorFBConfigMapping(dpy, ret[i], vendor);
+        if (r) {
+            for (; i >= 0; i--)
+                __VND.removeVendorFBConfigMapping(dpy, ret[i]);
+            break;
+        }
+    }
+    return r;
 }
 
 static inline void AddVisualMapping(Display *dpy, const XVisualInfo *visual,
@@ -42,16 +48,16 @@ static inline void AddVisualMapping(Display *dpy, const XVisualInfo *visual,
     __VND.addScreenVisualMapping(dpy, visual, vendor);
 }
 
-static inline void AddDrawableMapping(Display *dpy, GLXDrawable drawable,
-                                      __GLXvendorInfo *vendor)
-{
-    __VND.addVendorDrawableMapping(dpy, drawable, vendor);
-}
-
-static inline void AddContextMapping(Display *dpy, GLXContext ctx,
+static inline int AddDrawableMapping(Display *dpy, GLXDrawable drawable,
                                      __GLXvendorInfo *vendor)
 {
-    __VND.addVendorContextMapping(dpy, ctx, vendor);
+    return __VND.addVendorDrawableMapping(dpy, drawable, vendor);
+}
+
+static inline int AddContextMapping(Display *dpy, GLXContext ctx,
+                                    __GLXvendorInfo *vendor)
+{
+    return __VND.addVendorContextMapping(dpy, ctx, vendor);
 }
 
 static inline void GetDispatchFromDrawable(Display *dpy, GLXDrawable drawable,
