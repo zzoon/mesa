@@ -214,6 +214,22 @@ anv_gem_get_param(int fd, uint32_t param)
    return 0;
 }
 
+int
+anv_gem_get_cap(int fd, uint64_t capability, uint64_t *value)
+{
+   int ret;
+   struct drm_get_cap cap = {
+      .capability = capability
+   };
+
+   ret = anv_ioctl(fd, DRM_IOCTL_GET_CAP, &cap);
+   if (ret)
+      return ret;
+
+   *value = cap.value;
+   return 0;
+}
+
 bool
 anv_gem_get_bit6_swizzle(int fd, uint32_t tiling)
 {

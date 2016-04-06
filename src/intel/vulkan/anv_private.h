@@ -58,6 +58,7 @@ typedef uint32_t xcb_window_t;
 #define VK_PROTOTYPES
 #include <vulkan/vulkan.h>
 #include <vulkan/vulkan_intel.h>
+#include <vulkan/vulkan_wayland.h>
 #include <vulkan/vk_icd.h>
 
 #include "anv_entrypoints.h"
@@ -717,6 +718,7 @@ int anv_gem_set_tiling(struct anv_device *device, uint32_t gem_handle,
 int anv_gem_create_context(struct anv_device *device);
 int anv_gem_destroy_context(struct anv_device *device, int context);
 int anv_gem_get_param(int fd, uint32_t param);
+int anv_gem_get_cap(int fd, uint64_t capability, uint64_t *value);
 bool anv_gem_get_bit6_swizzle(int fd, uint32_t tiling);
 int anv_gem_get_aperture(int fd, uint64_t *size);
 int anv_gem_handle_to_fd(struct anv_device *device, uint32_t gem_handle);

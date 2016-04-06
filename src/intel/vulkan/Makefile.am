@@ -26,7 +26,8 @@ vulkan_includedir = $(includedir)/vulkan
 vulkan_include_HEADERS =				\
 	$(top_srcdir)/include/vulkan/vk_platform.h	\
 	$(top_srcdir)/include/vulkan/vulkan.h		\
-	$(top_srcdir)/include/vulkan/vulkan_intel.h
+	$(top_srcdir)/include/vulkan/vulkan_intel.h	\
+	$(top_srcdir)/include/vulkan/vulkan_wayland.h
 
 # Used when generating entrypoints to filter out unwanted extensions
 VULKAN_ENTRYPOINT_CPPFLAGS = \
@@ -138,6 +139,7 @@ libanv_gen9_la_CFLAGS = $(libvulkan_intel_la_CFLAGS) -DGEN_VERSIONx10=90
 if HAVE_EGL_PLATFORM_WAYLAND
 BUILT_SOURCES += \
 	wayland-drm-protocol.c \
+	wayland-drm-server-protocol.h \
 	wayland-drm-client-protocol.h
 
 %-protocol.c : $(top_srcdir)/src/egl/wayland/wayland-drm/%.xml
@@ -146,9 +148,13 @@ BUILT_SOURCES += \
 %-client-protocol.h : $(top_srcdir)/src/egl/wayland/wayland-drm/%.xml
 	$(AM_V_GEN)$(WAYLAND_SCANNER) client-header < $< > $@
 
+%-server-protocol.h : $(top_srcdir)/src/egl/wayland/wayland-drm/%.xml
+	$(AM_V_GEN)$(WAYLAND_SCANNER) server-header < $< > $@
+
 AM_CPPFLAGS += -I$(top_srcdir)/src/egl/wayland/wayland-drm
 VULKAN_SOURCES += \
 	wayland-drm-protocol.c \
+	anv_wayland.c \
 	anv_wsi_wayland.c
 libvulkan_intel_la_CFLAGS += -DHAVE_WAYLAND_PLATFORM
 endif

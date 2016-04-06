@@ -124,6 +124,16 @@ anv_physical_device_init(struct anv_physical_device *device,
       goto fail;
    }
 
+   uint64_t cap;
+
+   if (anv_gem_get_cap(fd, DRM_CAP_PRIME, &cap) == -1 ||
+       (cap & DRM_PRIME_CAP_IMPORT) == 0 ||
+       (cap & DRM_PRIME_CAP_EXPORT) == 0) {
+          result = vk_errorf(VK_ERROR_INITIALIZATION_FAILED,
+                             "kernel missing prime import/export");
+      goto fail;
+   }
+
    bool swizzled = anv_gem_get_bit6_swizzle(fd, I915_TILING_X);
 
    close(fd);
