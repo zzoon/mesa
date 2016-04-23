@@ -1,18 +1,10 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
-#include <pthread.h>
-#include <dlfcn.h>
-
 #include <X11/Xlib.h>
-#include <X11/Xlibint.h>
 
 #include "glvnd/libglxabi.h"
 
-#include "glx_error.h"
 #include "glxglvnd.h"
 
-#include <assert.h>
 
 static Bool __glXGLVNDIsScreenSupported(Display *dpy, int screen)
 {

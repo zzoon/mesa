@@ -1,7 +1,7 @@
 #ifndef _glx_lib_glvnd_h_
 #define _glx_lib_glvnd_h_
 
-#include "glvnd/libglxabi.h"
+typedef struct __GLXapiExportsRec __GLXapiExports;
 
 extern const __GLXapiExports *__glXGLVNDAPIExports;
 

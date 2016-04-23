@@ -3,8 +3,8 @@
 /*
  * Helper functions used by g_glxglvnddispatchfuncs.c.
  */
+#include "glvnd/libglxabi.h"
 #include "glxglvnd.h"
-#include <assert.h>
 
 #define __VND __glXGLVNDAPIExports
 
