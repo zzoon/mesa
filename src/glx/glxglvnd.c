@@ -54,18 +54,8 @@ static void __glXGLVNDSetDispatchIndex(const GLubyte *procName, int index)
         __glXDispatchTableIndices[internalIndex] = index;
 }
 
-static __GLXapiImports glvndImports = {
-    __glXGLVNDIsScreenSupported, // isScreenSupported
-    __glXGLVNDGetProcAddress, // getProcAddress
-    __glXGLVNDGetDispatchAddress, // getDispatchAddress
-    __glXGLVNDSetDispatchIndex, // setDispatchIndex
-    NULL, // notifyError
-    NULL // patchCallbacks
-};
-
-_X_EXPORT const __GLXapiImports *__glx_Main(uint32_t version,
-                                            const __GLXapiExports *exports,
-                                            __GLXvendorInfo *vendor);
+_X_EXPORT Bool __glx_Main(uint32_t version, const __GLXapiExports *exports,
+                          __GLXvendorInfo *vendor, __GLXapiImports *imports)
 {
     static Bool initDone = False;
 
@@ -73,13 +63,21 @@ _X_EXPORT const __GLXapiImports *__glx_Main(uint32_t version,
         GLX_VENDOR_ABI_GET_MAJOR_VERSION(GLX_VENDOR_ABI_VERSION) ||
         GLX_VENDOR_ABI_GET_MINOR_VERSION(version) <
         GLX_VENDOR_ABI_GET_MINOR_VERSION(GLX_VENDOR_ABI_VERSION))
-        return NULL;
+        return False;
 
     if (!initDone) {
         initDone = True;
         __glXGLVNDInitDispatchFunctions();
         memcpy(&__glXGLVNDAPIExports, exports, sizeof(*exports));
+
+        imports->isScreenSupported = __glXGLVNDIsScreenSupported;
+        imports->getProcAddress = __glXGLVNDGetProcAddress;
+        imports->getDispatchAddress = __glXGLVNDGetDispatchAddress;
+        imports->setDispatchIndex = __glXGLVNDSetDispatchIndex;
+        imports->notifyError = NULL;
+        imports->patchCallbacks->isPatchSupported = NULL;
+        imports->patchCallbacks->initiatePatch = NULL;
     }
 
-    return &glvndImports;
+    return True;
 }
