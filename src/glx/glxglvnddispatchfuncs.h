@@ -63,7 +63,7 @@ static inline void GetDispatchFromDrawable(Display *dpy, GLXDrawable drawable,
 static inline void GetDispatchFromContext(Display *dpy, GLXContext ctx,
                                           __GLXvendorInfo **retVendor)
 {
-    __VND.vendorFromContext(ctx, NULL, retVendor);
+    __VND.vendorFromContext(ctx, retVendor);
 }
 
 static inline void GetDispatchFromFBConfig(Display *dpy, GLXFBConfig config,
