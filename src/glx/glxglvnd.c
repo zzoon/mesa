@@ -75,8 +75,8 @@ _X_EXPORT Bool __glx_Main(uint32_t version, const __GLXapiExports *exports,
         imports->getDispatchAddress = __glXGLVNDGetDispatchAddress;
         imports->setDispatchIndex = __glXGLVNDSetDispatchIndex;
         imports->notifyError = NULL;
-        imports->patchCallbacks->isPatchSupported = NULL;
-        imports->patchCallbacks->initiatePatch = NULL;
+        imports->isPatchSupported = NULL;
+        imports->initiatePatch = NULL;
     }
 
     return True;
