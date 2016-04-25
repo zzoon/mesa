@@ -54,22 +54,22 @@ static inline int AddContextMapping(Display *dpy, GLXContext ctx,
     return __VND.addVendorContextMapping(dpy, ctx, vendor);
 }
 
-static inline void GetDispatchFromDrawable(Display *dpy, GLXDrawable drawable,
-                                           __GLXvendorInfo **retVendor)
+static inline __GLXvendorInfo *GetDispatchFromDrawable(Display *dpy,
+                                                       GLXDrawable drawable)
 {
-    __VND.vendorFromDrawable(dpy, drawable, retVendor);
+    return __VND.vendorFromDrawable(dpy, drawable);
 }
 
-static inline void GetDispatchFromContext(Display *dpy, GLXContext ctx,
-                                          __GLXvendorInfo **retVendor)
+static inline __GLXvendorInfo *GetDispatchFromContext(Display *dpy,
+                                                      GLXContext ctx)
 {
-    __VND.vendorFromContext(ctx, retVendor);
+    return __VND.vendorFromContext(ctx);
 }
 
 static inline void GetDispatchFromFBConfig(Display *dpy, GLXFBConfig config,
                                            __GLXvendorInfo **retVendor)
 {
-    __VND.vendorFromFBConfig(dpy, config, retVendor);
+    return __VND.vendorFromFBConfig(dpy, config);
 }
 
 static inline __GLXvendorInfo *GetDispatchFromVisual(Display *dpy,

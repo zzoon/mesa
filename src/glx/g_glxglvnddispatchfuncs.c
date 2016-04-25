@@ -116,7 +116,7 @@ static void dispatch_BindTexImageEXT(Display * dpy, GLXDrawable drawable, int bu
     __GLXvendorInfo *dd = NULL;
 
 
-    GetDispatchFromDrawable(dpy, drawable, &dd);
+    dd = GetDispatchFromDrawable(dpy, drawable);
     pBindTexImageEXT = (fn_BindTexImageEXT_ptr)(dd ?
         __VND.fetchDispatchEntry(dd,
              __glXDispatchTableIndices[DI_BindTexImageEXT]) :
@@ -167,7 +167,7 @@ static GLXContext dispatch_CreateContextAttribsARB(Display * dpy, GLXFBConfig co
     GLXContext ret = None;
 
 
-    GetDispatchFromFBConfig(dpy, config, &dd);
+    dd = GetDispatchFromFBConfig(dpy, config);
     pCreateContextAttribsARB = (fn_CreateContextAttribsARB_ptr)(dd ?
         __VND.fetchDispatchEntry(dd,
              __glXDispatchTableIndices[DI_CreateContextAttribsARB]) :
@@ -198,7 +198,7 @@ static GLXContext dispatch_CreateContextWithConfigSGIX(Display * dpy, GLXFBConfi
     GLXContext ret = None;
 
 
-    GetDispatchFromFBConfig(dpy, config, &dd);
+    dd = GetDispatchFromFBConfig(dpy, config);
     pCreateContextWithConfigSGIX = (fn_CreateContextWithConfigSGIX_ptr)(dd ?
         __VND.fetchDispatchEntry(dd,
              __glXDispatchTableIndices[DI_CreateContextWithConfigSGIX]) :
@@ -229,7 +229,7 @@ static GLXPbuffer dispatch_CreateGLXPbufferSGIX(Display * dpy, GLXFBConfig confi
     GLXPbuffer ret = None;
 
 
-    GetDispatchFromFBConfig(dpy, config, &dd);
+    dd = GetDispatchFromFBConfig(dpy, config);
     pCreateGLXPbufferSGIX = (fn_CreateGLXPbufferSGIX_ptr)(dd ?
         __VND.fetchDispatchEntry(dd,
              __glXDispatchTableIndices[DI_CreateGLXPbufferSGIX]) :
@@ -267,7 +267,7 @@ static GLXPixmap dispatch_CreateGLXPixmapWithConfigSGIX(Display * dpy, GLXFBConf
     GLXPixmap ret = None;
 
 
-    GetDispatchFromFBConfig(dpy, config, &dd);
+    dd = GetDispatchFromFBConfig(dpy, config);
     pCreateGLXPixmapWithConfigSGIX = (fn_CreateGLXPixmapWithConfigSGIX_ptr)(dd ?
         __VND.fetchDispatchEntry(dd,
              __glXDispatchTableIndices[DI_CreateGLXPixmapWithConfigSGIX]) :
@@ -297,7 +297,7 @@ static void dispatch_DestroyGLXPbufferSGIX(Display * dpy, GLXPbuffer pbuf)
     __GLXvendorInfo *dd = NULL;
 
 
-    GetDispatchFromDrawable(dpy, pbuf, &dd);
+    dd = GetDispatchFromDrawable(dpy, pbuf);
     pDestroyGLXPbufferSGIX = (fn_DestroyGLXPbufferSGIX_ptr)(dd ?
         __VND.fetchDispatchEntry(dd,
              __glXDispatchTableIndices[DI_DestroyGLXPbufferSGIX]) :
@@ -320,7 +320,7 @@ static GLXContextID dispatch_GetContextIDEXT(const GLXContext ctx)
     GLXContextID ret = None;
 
 
-    GetDispatchFromContext(dpy, ctx, &dd);
+    dd = GetDispatchFromContext(dpy, ctx);
     pGetContextIDEXT = (fn_GetContextIDEXT_ptr)(dd ?
         __VND.fetchDispatchEntry(dd,
              __glXDispatchTableIndices[DI_GetContextIDEXT]) :
@@ -372,7 +372,7 @@ static int dispatch_GetFBConfigAttribSGIX(Display * dpy, GLXFBConfigSGIX config,
     int ret = GLX_NO_EXTENSION;
 
 
-    GetDispatchFromFBConfig(dpy, config, &dd);
+    dd = GetDispatchFromFBConfig(dpy, config);
     pGetFBConfigAttribSGIX = (fn_GetFBConfigAttribSGIX_ptr)(dd ?
         __VND.fetchDispatchEntry(dd,
              __glXDispatchTableIndices[DI_GetFBConfigAttribSGIX]) :
@@ -423,7 +423,7 @@ static void dispatch_GetSelectedEventSGIX(Display * dpy, GLXDrawable drawable, u
     __GLXvendorInfo *dd = NULL;
 
 
-    GetDispatchFromDrawable(dpy, drawable, &dd);
+    dd = GetDispatchFromDrawable(dpy, drawable);
     pGetSelectedEventSGIX = (fn_GetSelectedEventSGIX_ptr)(dd ?
         __VND.fetchDispatchEntry(dd,
              __glXDispatchTableIndices[DI_GetSelectedEventSGIX]) :
@@ -475,7 +475,7 @@ static XVisualInfo * dispatch_GetVisualFromFBConfigSGIX(Display * dpy, GLXFBConf
     XVisualInfo * ret = NULL;
 
 
-    GetDispatchFromFBConfig(dpy, config, &dd);
+    dd = GetDispatchFromFBConfig(dpy, config);
     pGetVisualFromFBConfigSGIX = (fn_GetVisualFromFBConfigSGIX_ptr)(dd ?
         __VND.fetchDispatchEntry(dd,
              __glXDispatchTableIndices[DI_GetVisualFromFBConfigSGIX]) :
@@ -499,7 +499,7 @@ static int dispatch_QueryContextInfoEXT(Display * dpy, GLXContext ctx, int attri
     int ret = GLX_NO_EXTENSION;
 
 
-    GetDispatchFromContext(dpy, ctx, &dd);
+    dd = GetDispatchFromContext(dpy, ctx);
     pQueryContextInfoEXT = (fn_QueryContextInfoEXT_ptr)(dd ?
         __VND.fetchDispatchEntry(dd,
              __glXDispatchTableIndices[DI_QueryContextInfoEXT]) :
@@ -522,7 +522,7 @@ static void dispatch_QueryGLXPbufferSGIX(Display * dpy, GLXPbuffer pbuf, int att
     __GLXvendorInfo *dd = NULL;
 
 
-    GetDispatchFromDrawable(dpy, pbuf, &dd);
+    dd = GetDispatchFromDrawable(dpy, pbuf);
     pQueryGLXPbufferSGIX = (fn_QueryGLXPbufferSGIX_ptr)(dd ?
         __VND.fetchDispatchEntry(dd,
              __glXDispatchTableIndices[DI_QueryGLXPbufferSGIX]) :
@@ -543,7 +543,7 @@ static void dispatch_ReleaseTexImageEXT(Display * dpy, GLXDrawable drawable, int
     __GLXvendorInfo *dd = NULL;
 
 
-    GetDispatchFromDrawable(dpy, drawable, &dd);
+    dd = GetDispatchFromDrawable(dpy, drawable);
     pReleaseTexImageEXT = (fn_ReleaseTexImageEXT_ptr)(dd ?
         __VND.fetchDispatchEntry(dd,
              __glXDispatchTableIndices[DI_ReleaseTexImageEXT]) :
@@ -564,7 +564,7 @@ static void dispatch_SelectEventSGIX(Display * dpy, GLXDrawable drawable, unsign
     __GLXvendorInfo *dd = NULL;
 
 
-    GetDispatchFromDrawable(dpy, drawable, &dd);
+    dd = GetDispatchFromDrawable(dpy, drawable);
     pSelectEventSGIX = (fn_SelectEventSGIX_ptr)(dd ?
         __VND.fetchDispatchEntry(dd,
              __glXDispatchTableIndices[DI_SelectEventSGIX]) :
@@ -645,7 +645,7 @@ static void dispatch_glXBindSwapBarrierSGIX(Display * dpy, GLXDrawable drawable,
     __GLXvendorInfo *dd = NULL;
 
 
-    GetDispatchFromDrawable(dpy, drawable, &dd);
+    dd = GetDispatchFromDrawable(dpy, drawable);
     pglXBindSwapBarrierSGIX = (fn_glXBindSwapBarrierSGIX_ptr)(dd ?
         __VND.fetchDispatchEntry(dd,
              __glXDispatchTableIndices[DI_glXBindSwapBarrierSGIX]) :
@@ -666,7 +666,7 @@ static void dispatch_glXCopySubBufferMESA(Display * dpy, GLXDrawable drawable, i
     __GLXvendorInfo *dd = NULL;
 
 
-    GetDispatchFromDrawable(dpy, drawable, &dd);
+    dd = GetDispatchFromDrawable(dpy, drawable);
     pglXCopySubBufferMESA = (fn_glXCopySubBufferMESA_ptr)(dd ?
         __VND.fetchDispatchEntry(dd,
              __glXDispatchTableIndices[DI_glXCopySubBufferMESA]) :
@@ -719,7 +719,7 @@ static GLboolean dispatch_glXGetMscRateOML(Display * dpy, GLXDrawable drawable, 
     GLboolean ret = GL_FALSE;
 
 
-    GetDispatchFromDrawable(dpy, drawable, &dd);
+    dd = GetDispatchFromDrawable(dpy, drawable);
     pglXGetMscRateOML = (fn_glXGetMscRateOML_ptr)(dd ?
         __VND.fetchDispatchEntry(dd,
              __glXDispatchTableIndices[DI_glXGetMscRateOML]) :
@@ -795,7 +795,7 @@ static Bool dispatch_glXGetSyncValuesOML(Display * dpy, GLXDrawable drawable, in
     Bool ret = False;
 
 
-    GetDispatchFromDrawable(dpy, drawable, &dd);
+    dd = GetDispatchFromDrawable(dpy, drawable);
     pglXGetSyncValuesOML = (fn_glXGetSyncValuesOML_ptr)(dd ?
         __VND.fetchDispatchEntry(dd,
              __glXDispatchTableIndices[DI_glXGetSyncValuesOML]) :
@@ -818,7 +818,7 @@ static void dispatch_glXJoinSwapGroupSGIX(Display * dpy, GLXDrawable drawable, G
     __GLXvendorInfo *dd = NULL;
 
 
-    GetDispatchFromDrawable(dpy, drawable, &dd);
+    dd = GetDispatchFromDrawable(dpy, drawable);
     pglXJoinSwapGroupSGIX = (fn_glXJoinSwapGroupSGIX_ptr)(dd ?
         __VND.fetchDispatchEntry(dd,
              __glXDispatchTableIndices[DI_glXJoinSwapGroupSGIX]) :
@@ -968,7 +968,7 @@ static Bool dispatch_glXReleaseBuffersMESA(Display * dpy, GLXDrawable d)
     Bool ret = False;
 
 
-    GetDispatchFromDrawable(dpy, d, &dd);
+    dd = GetDispatchFromDrawable(dpy, d);
     pglXReleaseBuffersMESA = (fn_glXReleaseBuffersMESA_ptr)(dd ?
         __VND.fetchDispatchEntry(dd,
              __glXDispatchTableIndices[DI_glXReleaseBuffersMESA]) :
@@ -992,7 +992,7 @@ static int64_t dispatch_glXSwapBuffersMscOML(Display * dpy, GLXDrawable drawable
     int64_t ret = 0;
 
 
-    GetDispatchFromDrawable(dpy, drawable, &dd);
+    dd = GetDispatchFromDrawable(dpy, drawable);
     pglXSwapBuffersMscOML = (fn_glXSwapBuffersMscOML_ptr)(dd ?
         __VND.fetchDispatchEntry(dd,
              __glXDispatchTableIndices[DI_glXSwapBuffersMscOML]) :
@@ -1044,7 +1044,7 @@ static Bool dispatch_glXWaitForMscOML(Display * dpy, GLXDrawable drawable, int64
     Bool ret = False;
 
 
-    GetDispatchFromDrawable(dpy, drawable, &dd);
+    dd = GetDispatchFromDrawable(dpy, drawable);
     pglXWaitForMscOML = (fn_glXWaitForMscOML_ptr)(dd ?
         __VND.fetchDispatchEntry(dd,
              __glXDispatchTableIndices[DI_glXWaitForMscOML]) :
@@ -1068,7 +1068,7 @@ static Bool dispatch_glXWaitForSbcOML(Display * dpy, GLXDrawable drawable, int64
     Bool ret = False;
 
 
-    GetDispatchFromDrawable(dpy, drawable, &dd);
+    dd = GetDispatchFromDrawable(dpy, drawable);
     pglXWaitForSbcOML = (fn_glXWaitForSbcOML_ptr)(dd ?
         __VND.fetchDispatchEntry(dd,
              __glXDispatchTableIndices[DI_glXWaitForSbcOML]) :
