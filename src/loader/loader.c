@@ -64,6 +64,7 @@
  *    Rob Clark <robclark@freedesktop.org>
  */
 
+#include <sys/stat.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
