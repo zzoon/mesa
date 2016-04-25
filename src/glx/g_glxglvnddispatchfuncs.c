@@ -9,7 +9,8 @@
 #include "g_glxglvnddispatchindices.h"
 
 const int DI_FUNCTION_COUNT = DI_LAST_INDEX;
-int __glXDispatchTableIndices[DI_LAST_INDEX];
+/* Allocate an extra 'dummy' to ease lookup. See FindGLXFunction() */
+int __glXDispatchTableIndices[DI_LAST_INDEX + 1];
 const __GLXapiExports *__glXGLVNDAPIExports;
 
 const char * const __glXDispatchTableStrings[DI_LAST_INDEX] = {
@@ -934,7 +935,8 @@ static Bool dispatch_glXWaitForSbcOML(Display *dpy, GLXDrawable drawable,
 #undef __FETCH_FUNCTION_PTR
 
 
-const void * const __glXDispatchFunctions[DI_LAST_INDEX] = {
+/* Allocate an extra 'dummy' to ease lookup. See FindGLXFunction() */
+const void * const __glXDispatchFunctions[DI_LAST_INDEX + 1] = {
 #define __ATTRIB(field) \
     [DI_##field] = (void *)dispatch_##field
 
@@ -984,5 +986,6 @@ const void * const __glXDispatchFunctions[DI_LAST_INDEX] = {
     __ATTRIB(glXWaitForMscOML),
     __ATTRIB(glXWaitForSbcOML),
 
+    [DI_LAST_INDEX] = NULL,
 #undef __ATTRIB
 };
