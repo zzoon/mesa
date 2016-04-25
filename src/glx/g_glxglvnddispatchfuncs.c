@@ -316,11 +316,10 @@ static GLXContextID dispatch_GetContextIDEXT(const GLXContext ctx)
     typedef GLXContextID (*fn_GetContextIDEXT_ptr)(const GLXContext ctx);
     fn_GetContextIDEXT_ptr pGetContextIDEXT;
     __GLXvendorInfo *dd = NULL;
-    Display *dpy = GET_DEFAULT_DISPLAY();
     GLXContextID ret = None;
 
 
-    dd = GetDispatchFromContext(dpy, ctx);
+    dd = GetDispatchFromContext(ctx);
     pGetContextIDEXT = (fn_GetContextIDEXT_ptr)(dd ?
         __VND.fetchDispatchEntry(dd,
              __glXDispatchTableIndices[DI_GetContextIDEXT]) :
@@ -499,7 +498,7 @@ static int dispatch_QueryContextInfoEXT(Display * dpy, GLXContext ctx, int attri
     int ret = GLX_NO_EXTENSION;
 
 
-    dd = GetDispatchFromContext(dpy, ctx);
+    dd = GetDispatchFromContext(ctx);
     pQueryContextInfoEXT = (fn_QueryContextInfoEXT_ptr)(dd ?
         __VND.fetchDispatchEntry(dd,
              __glXDispatchTableIndices[DI_QueryContextInfoEXT]) :

@@ -8,15 +8,6 @@
 
 #define __VND __glXGLVNDAPIExports
 
-#define GET_CURRENT_DISPLAY() glXGetCurrentDisplay()
-
-static inline Display *GET_DEFAULT_DISPLAY(void)
-{
-    // TODO think of a better heuristic...
-    assert(!"GET_DEFAULT_DISPLAY() called");
-    return GET_CURRENT_DISPLAY();
-}
-
 static inline int AddFBConfigMapping(Display *dpy, GLXFBConfig config,
                                      __GLXvendorInfo *vendor)
 {
@@ -60,14 +51,12 @@ static inline __GLXvendorInfo *GetDispatchFromDrawable(Display *dpy,
     return __VND.vendorFromDrawable(dpy, drawable);
 }
 
-static inline __GLXvendorInfo *GetDispatchFromContext(Display *dpy,
-                                                      GLXContext ctx)
+static inline __GLXvendorInfo *GetDispatchFromContext(GLXContext ctx)
 {
     return __VND.vendorFromContext(ctx);
 }
 
-static inline void GetDispatchFromFBConfig(Display *dpy, GLXFBConfig config,
-                                           __GLXvendorInfo **retVendor)
+static inline __GLXvendorInfo *GetDispatchFromFBConfig(Display *dpy, GLXFBConfig config)
 {
     return __VND.vendorFromFBConfig(dpy, config);
 }
