@@ -67,7 +67,6 @@ _X_EXPORT Bool __glx_Main(uint32_t version, const __GLXapiExports *exports,
 
     if (!initDone) {
         initDone = True;
-        __glXGLVNDInitDispatchFunctions();
         __glXGLVNDAPIExports = exports;
 
         imports->isScreenSupported = __glXGLVNDIsScreenSupported;

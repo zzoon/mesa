@@ -10,7 +10,6 @@
 
 const int DI_FUNCTION_COUNT = DI_LAST_INDEX;
 int __glXDispatchTableIndices[DI_LAST_INDEX];
-void *__glXDispatchFunctions[DI_LAST_INDEX];
 const __GLXapiExports *__glXGLVNDAPIExports;
 
 const char * const __glXDispatchTableStrings[DI_LAST_INDEX] = {
@@ -1080,55 +1079,55 @@ static Bool dispatch_glXWaitForSbcOML(Display * dpy, GLXDrawable drawable, int64
 
 }
 
+const void * const __glXDispatchFunctions[DI_LAST_INDEX] = {
+#define __ATTRIB(field) \
+    [DI_##field] = (void *)dispatch_##field
 
-
-void __glXGLVNDInitDispatchFunctions(void)
-{
-
-    __glXDispatchFunctions[DI_BindTexImageEXT] = (void *)dispatch_BindTexImageEXT;
-    __glXDispatchFunctions[DI_ChooseFBConfigSGIX] = (void *)dispatch_ChooseFBConfigSGIX;
-    __glXDispatchFunctions[DI_CreateContextAttribsARB] = (void *)dispatch_CreateContextAttribsARB;
-    __glXDispatchFunctions[DI_CreateContextWithConfigSGIX] = (void *)dispatch_CreateContextWithConfigSGIX;
-    __glXDispatchFunctions[DI_CreateGLXPbufferSGIX] = (void *)dispatch_CreateGLXPbufferSGIX;
-    __glXDispatchFunctions[DI_CreateGLXPixmapWithConfigSGIX] = (void *)dispatch_CreateGLXPixmapWithConfigSGIX;
-    __glXDispatchFunctions[DI_DestroyGLXPbufferSGIX] = (void *)dispatch_DestroyGLXPbufferSGIX;
-    __glXDispatchFunctions[DI_GetContextIDEXT] = (void *)dispatch_GetContextIDEXT;
-    __glXDispatchFunctions[DI_GetCurrentDisplayEXT] = (void *)dispatch_GetCurrentDisplayEXT;
-    __glXDispatchFunctions[DI_GetFBConfigAttribSGIX] = (void *)dispatch_GetFBConfigAttribSGIX;
-    __glXDispatchFunctions[DI_GetFBConfigFromVisualSGIX] = (void *)dispatch_GetFBConfigFromVisualSGIX;
-    __glXDispatchFunctions[DI_GetSelectedEventSGIX] = (void *)dispatch_GetSelectedEventSGIX;
+    __ATTRIB(BindTexImageEXT),
+    __ATTRIB(BindTexImageEXT),
+    __ATTRIB(ChooseFBConfigSGIX),
+    __ATTRIB(CreateContextAttribsARB),
+    __ATTRIB(CreateContextWithConfigSGIX),
+    __ATTRIB(CreateGLXPbufferSGIX),
+    __ATTRIB(CreateGLXPixmapWithConfigSGIX),
+    __ATTRIB(DestroyGLXPbufferSGIX),
+    __ATTRIB(GetContextIDEXT),
+    __ATTRIB(GetCurrentDisplayEXT),
+    __ATTRIB(GetFBConfigAttribSGIX),
+    __ATTRIB(GetFBConfigFromVisualSGIX),
+    __ATTRIB(GetSelectedEventSGIX),
 #if defined(GLX_SGI_video_sync)
-    __glXDispatchFunctions[DI_GetVideoSyncSGI] = (void *)dispatch_GetVideoSyncSGI;
+    __ATTRIB(GetVideoSyncSGI),
 #endif // defined(GLX_SGI_video_sync)
-    __glXDispatchFunctions[DI_GetVisualFromFBConfigSGIX] = (void *)dispatch_GetVisualFromFBConfigSGIX;
-    __glXDispatchFunctions[DI_QueryContextInfoEXT] = (void *)dispatch_QueryContextInfoEXT;
-    __glXDispatchFunctions[DI_QueryGLXPbufferSGIX] = (void *)dispatch_QueryGLXPbufferSGIX;
-    __glXDispatchFunctions[DI_ReleaseTexImageEXT] = (void *)dispatch_ReleaseTexImageEXT;
-    __glXDispatchFunctions[DI_SelectEventSGIX] = (void *)dispatch_SelectEventSGIX;
+    __ATTRIB(GetVisualFromFBConfigSGIX),
+    __ATTRIB(QueryContextInfoEXT),
+    __ATTRIB(QueryGLXPbufferSGIX),
+    __ATTRIB(ReleaseTexImageEXT),
+    __ATTRIB(SelectEventSGIX),
 #if defined(GLX_SGI_swap_control)
-    __glXDispatchFunctions[DI_SwapIntervalSGI] = (void *)dispatch_SwapIntervalSGI;
+    __ATTRIB(SwapIntervalSGI),
 #endif // defined(GLX_SGI_swap_control)
 #if defined(GLX_SGI_video_sync)
-    __glXDispatchFunctions[DI_WaitVideoSyncSGI] = (void *)dispatch_WaitVideoSyncSGI;
+    __ATTRIB(WaitVideoSyncSGI),
 #endif // defined(GLX_SGI_video_sync)
-    __glXDispatchFunctions[DI_glXBindSwapBarrierSGIX] = (void *)dispatch_glXBindSwapBarrierSGIX;
-    __glXDispatchFunctions[DI_glXCopySubBufferMESA] = (void *)dispatch_glXCopySubBufferMESA;
-    __glXDispatchFunctions[DI_glXCreateGLXPixmapMESA] = (void *)dispatch_glXCreateGLXPixmapMESA;
-    __glXDispatchFunctions[DI_glXGetMscRateOML] = (void *)dispatch_glXGetMscRateOML;
-    __glXDispatchFunctions[DI_glXGetScreenDriver] = (void *)dispatch_glXGetScreenDriver;
-    __glXDispatchFunctions[DI_glXGetSwapIntervalMESA] = (void *)dispatch_glXGetSwapIntervalMESA;
-    __glXDispatchFunctions[DI_glXGetSyncValuesOML] = (void *)dispatch_glXGetSyncValuesOML;
-    __glXDispatchFunctions[DI_glXJoinSwapGroupSGIX] = (void *)dispatch_glXJoinSwapGroupSGIX;
-    __glXDispatchFunctions[DI_glXQueryCurrentRendererIntegerMESA] = (void *)dispatch_glXQueryCurrentRendererIntegerMESA;
-    __glXDispatchFunctions[DI_glXQueryCurrentRendererStringMESA] = (void *)dispatch_glXQueryCurrentRendererStringMESA;
-    __glXDispatchFunctions[DI_glXQueryMaxSwapBarriersSGIX] = (void *)dispatch_glXQueryMaxSwapBarriersSGIX;
-    __glXDispatchFunctions[DI_glXQueryRendererIntegerMESA] = (void *)dispatch_glXQueryRendererIntegerMESA;
-    __glXDispatchFunctions[DI_glXQueryRendererStringMESA] = (void *)dispatch_glXQueryRendererStringMESA;
-    __glXDispatchFunctions[DI_glXReleaseBuffersMESA] = (void *)dispatch_glXReleaseBuffersMESA;
-    __glXDispatchFunctions[DI_glXSwapBuffersMscOML] = (void *)dispatch_glXSwapBuffersMscOML;
-    __glXDispatchFunctions[DI_glXSwapIntervalMESA] = (void *)dispatch_glXSwapIntervalMESA;
-    __glXDispatchFunctions[DI_glXWaitForMscOML] = (void *)dispatch_glXWaitForMscOML;
-    __glXDispatchFunctions[DI_glXWaitForSbcOML] = (void *)dispatch_glXWaitForSbcOML;
+    __ATTRIB(glXBindSwapBarrierSGIX),
+    __ATTRIB(glXCopySubBufferMESA),
+    __ATTRIB(glXCreateGLXPixmapMESA),
+    __ATTRIB(glXGetMscRateOML),
+    __ATTRIB(glXGetScreenDriver),
+    __ATTRIB(glXGetSwapIntervalMESA),
+    __ATTRIB(glXGetSyncValuesOML),
+    __ATTRIB(glXJoinSwapGroupSGIX),
+    __ATTRIB(glXQueryCurrentRendererIntegerMESA),
+    __ATTRIB(glXQueryCurrentRendererStringMESA),
+    __ATTRIB(glXQueryMaxSwapBarriersSGIX),
+    __ATTRIB(glXQueryRendererIntegerMESA),
+    __ATTRIB(glXQueryRendererStringMESA),
+    __ATTRIB(glXReleaseBuffersMESA),
+    __ATTRIB(glXSwapBuffersMscOML),
+    __ATTRIB(glXSwapIntervalMESA),
+    __ATTRIB(glXWaitForMscOML),
+    __ATTRIB(glXWaitForSbcOML),
 
-}
-
+#undef __ATTRIB
+};
