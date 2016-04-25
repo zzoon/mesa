@@ -49,9 +49,9 @@ static inline void AddDrawableMapping(Display *dpy, GLXDrawable drawable,
 }
 
 static inline void AddContextMapping(Display *dpy, GLXContext ctx,
-                                     int screen, __GLXvendorInfo *vendor)
+                                     __GLXvendorInfo *vendor)
 {
-    __VND.addScreenContextMapping(dpy, ctx, screen, vendor);
+    __VND.addVendorContextMapping(dpy, ctx, vendor);
 }
 
 static inline void GetDispatchFromDrawable(Display *dpy, GLXDrawable drawable,
@@ -61,9 +61,9 @@ static inline void GetDispatchFromDrawable(Display *dpy, GLXDrawable drawable,
 }
 
 static inline void GetDispatchFromContext(Display *dpy, GLXContext ctx,
-                                          int *retScreen, __GLXvendorInfo **retVendor)
+                                          __GLXvendorInfo **retVendor)
 {
-    __VND.vendorFromContext(ctx, NULL, retScreen, retVendor);
+    __VND.vendorFromContext(ctx, NULL, retVendor);
 }
 
 static inline void GetDispatchFromFBConfig(Display *dpy, GLXFBConfig config,

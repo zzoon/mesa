@@ -175,7 +175,7 @@ static GLXContext dispatch_CreateContextAttribsARB(Display * dpy, GLXFBConfig co
         ret = (*pCreateContextAttribsARB)(dpy, config, share_list, direct, attrib_list);
     }
 
-    AddContextMapping(dpy, ret, disp_screen, dd);
+    AddContextMapping(dpy, ret, dd);
 
     return ret;
 
@@ -202,7 +202,7 @@ static GLXContext dispatch_CreateContextWithConfigSGIX(Display * dpy, GLXFBConfi
         ret = (*pCreateContextWithConfigSGIX)(dpy, config, render_type, share_list, direct);
     }
 
-    AddContextMapping(dpy, ret, disp_screen, dd);
+    AddContextMapping(dpy, ret, dd);
 
     return ret;
 
@@ -295,7 +295,7 @@ static GLXContextID dispatch_GetContextIDEXT(const GLXContext ctx)
     GLXContextID ret = None;
 
 
-    GetDispatchFromContext(dpy, ctx, NULL, &dd);
+    GetDispatchFromContext(dpy, ctx, &dd);
     pGetContextIDEXT = (fn_GetContextIDEXT_ptr)(dd ?
         __VND.fetchDispatchEntry(dd,
              __glXDispatchTableIndices[DI_GetContextIDEXT]) :
@@ -476,7 +476,7 @@ static int dispatch_QueryContextInfoEXT(Display * dpy, GLXContext ctx, int attri
     int ret = GLX_NO_EXTENSION;
 
 
-    GetDispatchFromContext(dpy, ctx, NULL, &dd);
+    GetDispatchFromContext(dpy, ctx, &dd);
     pQueryContextInfoEXT = (fn_QueryContextInfoEXT_ptr)(dd ?
         __VND.fetchDispatchEntry(dd,
              __glXDispatchTableIndices[DI_QueryContextInfoEXT]) :
