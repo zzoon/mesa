@@ -44,9 +44,7 @@ typedef enum __GLXdispatchIndex {
     // GetProcAddressARB implemented by libglvnd
     // GetSelectedEvent implemented by libglvnd
     DI_GetSelectedEventSGIX,
-#if defined(GLX_SGI_video_sync)
     DI_GetVideoSyncSGI,
-#endif // defined(GLX_SGI_video_sync)
     // GetVisualFromFBConfig implemented by libglvnd
     DI_GetVisualFromFBConfigSGIX,
     // ImportContextEXT implemented by libglvnd
@@ -65,14 +63,10 @@ typedef enum __GLXdispatchIndex {
     // SelectEvent implemented by libglvnd
     DI_SelectEventSGIX,
     // SwapBuffers implemented by libglvnd
-#if defined(GLX_SGI_swap_control)
     DI_SwapIntervalSGI,
-#endif // defined(GLX_SGI_swap_control)
     // UseXFont implemented by libglvnd
     // WaitGL implemented by libglvnd
-#if defined(GLX_SGI_video_sync)
     DI_WaitVideoSyncSGI,
-#endif // defined(GLX_SGI_video_sync)
     // WaitX implemented by libglvnd
     DI_glXBindSwapBarrierSGIX,
     DI_glXCopySubBufferMESA,

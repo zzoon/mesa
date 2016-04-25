@@ -55,9 +55,7 @@ const char * const __glXDispatchTableStrings[DI_LAST_INDEX] = {
     // glXGetProcAddressARB implemented by libglvnd
     // glXGetSelectedEvent implemented by libglvnd
     __ATTRIB(GetSelectedEventSGIX),
-#if defined(GLX_SGI_video_sync)
     __ATTRIB(GetVideoSyncSGI),
-#endif // defined(GLX_SGI_video_sync)
     // glXGetVisualFromFBConfig implemented by libglvnd
     __ATTRIB(GetVisualFromFBConfigSGIX),
     // glXImportContextEXT implemented by libglvnd
@@ -76,14 +74,10 @@ const char * const __glXDispatchTableStrings[DI_LAST_INDEX] = {
     // glXSelectEvent implemented by libglvnd
     __ATTRIB(SelectEventSGIX),
     // glXSwapBuffers implemented by libglvnd
-#if defined(GLX_SGI_swap_control)
     __ATTRIB(SwapIntervalSGI),
-#endif // defined(GLX_SGI_swap_control)
     // glXUseXFont implemented by libglvnd
     // glXWaitGL implemented by libglvnd
-#if defined(GLX_SGI_video_sync)
     __ATTRIB(WaitVideoSyncSGI),
-#endif // defined(GLX_SGI_video_sync)
     // glXWaitX implemented by libglvnd
 
     __ATTRIB(glXBindSwapBarrierSGIX),
@@ -404,7 +398,6 @@ static void dispatch_GetSelectedEventSGIX(Display *dpy, GLXDrawable drawable,
 
 
 
-#if defined(GLX_SGI_video_sync)
 static int dispatch_GetVideoSyncSGI(unsigned int *count)
 {
     PFNGLXGETVIDEOSYNCSGIPROC pGetVideoSyncSGI;
@@ -423,7 +416,6 @@ static int dispatch_GetVideoSyncSGI(unsigned int *count)
 
     return (*pGetVideoSyncSGI)(count);
 }
-#endif // defined(GLX_SGI_video_sync)
 
 
 
@@ -522,7 +514,6 @@ static void dispatch_SelectEventSGIX(Display *dpy, GLXDrawable drawable,
 
 
 
-#if defined(GLX_SGI_swap_control)
 static int dispatch_SwapIntervalSGI(int interval)
 {
     PFNGLXSWAPINTERVALSGIPROC pSwapIntervalSGI;
@@ -541,11 +532,9 @@ static int dispatch_SwapIntervalSGI(int interval)
 
     return (*pSwapIntervalSGI)(interval);
 }
-#endif // defined(GLX_SGI_swap_control)
 
 
 
-#if defined(GLX_SGI_video_sync)
 static int dispatch_WaitVideoSyncSGI(int divisor, int remainder,
                                      unsigned int *count)
 {
@@ -565,7 +554,6 @@ static int dispatch_WaitVideoSyncSGI(int divisor, int remainder,
 
     return (*pWaitVideoSyncSGI)(divisor, remainder, count);
 }
-#endif // defined(GLX_SGI_video_sync)
 
 
 
