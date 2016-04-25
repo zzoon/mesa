@@ -396,7 +396,7 @@ static GLXFBConfigSGIX dispatch_GetFBConfigFromVisualSGIX(Display * dpy, XVisual
     GLXFBConfigSGIX ret = NULL;
 
 
-    GetDispatchFromVisual(dpy, vis, &dd);
+    dd = GetDispatchFromVisual(dpy, vis);
     pGetFBConfigFromVisualSGIX = (fn_GetFBConfigFromVisualSGIX_ptr)(dd ?
         __VND.fetchDispatchEntry(dd,
              __glXDispatchTableIndices[DI_GetFBConfigFromVisualSGIX]) :
@@ -483,8 +483,6 @@ static XVisualInfo * dispatch_GetVisualFromFBConfigSGIX(Display * dpy, GLXFBConf
     if (pGetVisualFromFBConfigSGIX) {
         ret = (*pGetVisualFromFBConfigSGIX)(dpy, config);
     }
-
-    AddVisualMapping(dpy, ret, dd);
 
     return ret;
 
@@ -690,7 +688,7 @@ static GLXPixmap dispatch_glXCreateGLXPixmapMESA(Display * dpy, XVisualInfo * vi
     GLXPixmap ret = None;
 
 
-    GetDispatchFromVisual(dpy, visinfo, &dd);
+    dd = GetDispatchFromVisual(dpy, visinfo);
     pglXCreateGLXPixmapMESA = (fn_glXCreateGLXPixmapMESA_ptr)(dd ?
         __VND.fetchDispatchEntry(dd,
              __glXDispatchTableIndices[DI_glXCreateGLXPixmapMESA]) :

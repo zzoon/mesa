@@ -42,12 +42,6 @@ static inline int AddFBConfigsMapping(Display *dpy, const GLXFBConfig *ret,
     return r;
 }
 
-static inline void AddVisualMapping(Display *dpy, const XVisualInfo *visual,
-                                    __GLXvendorInfo *vendor)
-{
-    __VND.addScreenVisualMapping(dpy, visual, vendor);
-}
-
 static inline int AddDrawableMapping(Display *dpy, GLXDrawable drawable,
                                      __GLXvendorInfo *vendor)
 {
@@ -78,10 +72,10 @@ static inline void GetDispatchFromFBConfig(Display *dpy, GLXFBConfig config,
     __VND.vendorFromFBConfig(dpy, config, retVendor);
 }
 
-static inline void GetDispatchFromVisual(Display *dpy, const XVisualInfo *visual,
-                                         __GLXvendorInfo **retVendor)
+static inline __GLXvendorInfo *GetDispatchFromVisual(Display *dpy,
+                                                     const XVisualInfo *visual)
 {
-    __VND.vendorFromVisual(dpy, visual, retVendor);
+    return __VND->getDynDispatch(dpy, visual->screen);
 }
 
 #endif // __glx_glvnd_dispatch_funcs_h__
