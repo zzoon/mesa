@@ -16,7 +16,7 @@
 
 _X_EXPORT __GLX_MAIN_PROTO(version, exports, vendorName);
 
-static Bool __glXGLVNDSupportsScreen(Display *dpy, int screen)
+static Bool __glXGLVNDIsScreenSupported(Display *dpy, int screen)
 {
     return True;
 }
@@ -56,7 +56,7 @@ static void __glXGLVNDSetDispatchIndex(const GLubyte *procName, int index)
 }
 
 static __GLXapiImports glvndImports = {
-    __glXGLVNDSupportsScreen, // checkSupportsScreen
+    __glXGLVNDIsScreenSupported, // isScreenSupported
     __glXGLVNDGetProcAddress, // getProcAddress
     __glXGLVNDGetDispatchAddress, // getDispatchAddress
     __glXGLVNDSetDispatchIndex, // setDispatchIndex
