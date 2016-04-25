@@ -66,20 +66,6 @@ static inline void GetDispatchFromContext(Display *dpy, GLXContext ctx,
     __VND.vendorFromContext(ctx, NULL, retScreen, retVendor);
 }
 
-static inline __GLXvendorInfo *GetDispatchFromMultiContext(Display *dpy,
-                                                           GLXContext ctx1, GLXContext ctx2)
-{
-    __GLXvendorInfo *vendor = NULL;
-
-    if (__VND.vendorFromContext(ctx1, NULL, NULL, &vendor) == 0)
-        return vendor;
-
-    if (__VND.vendorFromContext(ctx2, NULL, NULL, &vendor) == 0)
-        return vendor;
-
-    return __VND.getCurrentDynDispatch();
-}
-
 static inline void GetDispatchFromFBConfig(Display *dpy, GLXFBConfig config,
                                            int *retScreen, __GLXvendorInfo **retVendor)
 {
