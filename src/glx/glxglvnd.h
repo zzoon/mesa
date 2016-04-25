@@ -3,7 +3,7 @@
 
 #include "glvnd/libglxabi.h"
 
-extern __GLXapiExports __glXGLVNDAPIExports;
+extern const __GLXapiExports *__glXGLVNDAPIExports;
 
 extern const int DI_FUNCTION_COUNT;
 

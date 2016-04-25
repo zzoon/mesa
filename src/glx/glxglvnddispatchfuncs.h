@@ -11,7 +11,7 @@
 static inline int AddFBConfigMapping(Display *dpy, GLXFBConfig config,
                                      __GLXvendorInfo *vendor)
 {
-    return __VND.addVendorFBConfigMapping(dpy, config, vendor);
+    return __VND->addVendorFBConfigMapping(dpy, config, vendor);
 }
 
 static inline int AddFBConfigsMapping(Display *dpy, const GLXFBConfig *ret,
@@ -23,10 +23,10 @@ static inline int AddFBConfigsMapping(Display *dpy, const GLXFBConfig *ret,
         return 0;
 
     for (i = 0; i < *nelements; i++) {
-        r = __VND.addVendorFBConfigMapping(dpy, ret[i], vendor);
+        r = __VND->addVendorFBConfigMapping(dpy, ret[i], vendor);
         if (r) {
             for (; i >= 0; i--)
-                __VND.removeVendorFBConfigMapping(dpy, ret[i]);
+                __VND->removeVendorFBConfigMapping(dpy, ret[i]);
             break;
         }
     }
@@ -36,29 +36,29 @@ static inline int AddFBConfigsMapping(Display *dpy, const GLXFBConfig *ret,
 static inline int AddDrawableMapping(Display *dpy, GLXDrawable drawable,
                                      __GLXvendorInfo *vendor)
 {
-    return __VND.addVendorDrawableMapping(dpy, drawable, vendor);
+    return __VND->addVendorDrawableMapping(dpy, drawable, vendor);
 }
 
 static inline int AddContextMapping(Display *dpy, GLXContext ctx,
                                     __GLXvendorInfo *vendor)
 {
-    return __VND.addVendorContextMapping(dpy, ctx, vendor);
+    return __VND->addVendorContextMapping(dpy, ctx, vendor);
 }
 
 static inline __GLXvendorInfo *GetDispatchFromDrawable(Display *dpy,
                                                        GLXDrawable drawable)
 {
-    return __VND.vendorFromDrawable(dpy, drawable);
+    return __VND->vendorFromDrawable(dpy, drawable);
 }
 
 static inline __GLXvendorInfo *GetDispatchFromContext(GLXContext ctx)
 {
-    return __VND.vendorFromContext(ctx);
+    return __VND->vendorFromContext(ctx);
 }
 
 static inline __GLXvendorInfo *GetDispatchFromFBConfig(Display *dpy, GLXFBConfig config)
 {
-    return __VND.vendorFromFBConfig(dpy, config);
+    return __VND->vendorFromFBConfig(dpy, config);
 }
 
 static inline __GLXvendorInfo *GetDispatchFromVisual(Display *dpy,
