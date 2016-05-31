@@ -1,0 +1,148 @@
+ - Just buffer sharing, leave timing and presentation feedback to
+   diplay server protocols. EGLStream conflates these issues.
+
+ - Includes fence sharing so we can properly wait on buffers being
+   ready for presentation (on server side) and being ready to use
+   again (on client side).
+
+ - Includes mechanism for sending buffers to server and feedback
+   stream for sending hints about optimal usage. Update client about
+   best tiling format, can we support sharing compressed or fast
+   cleared surfaces etc as the server uses the buffers for various
+   purposes.
+
+ - Texture from pixmap support requires getting buffer info from
+   server.
+
+
+/**
+ * Export a surface to another process
+ *
+ * This function returns a file descriptor which can be shared with
+ * another process. The other process can call gbm_surface_import() to
+ * create a surface from the file descriptor.
+ *
+ * A surface starts out as a local object, which connects to a higher
+ * level swapchain object (EGLSurface or VkSwapChain) and produces
+ * gbm_bo's that can be accessed using
+ * gbm_surface_lock_front_buffer().
+ *
+ * The caller must close the file descriptor.
+ *
+ * \param surf The surface
+ *
+ * \return The file descriptor
+ */
+
+GBM_EXPORT int
+gbm_surface_export(struct gbm_surface *surf)
+
+/**
+ * Import a surface from another process
+ *
+ * This function takes the file descriptor return from
+ * gbm_surface_export() and creates a gbm_surface that's connected to
+ * the surface in the other process. The surface returned is
+ * considered the consumer side. It's illegal to create higher level
+ * API objects (EGLSurface of Vk swapchains) from this surface, only
+ * gbm_surface_lock_front_buffer(), gbm_surface_release_buffer() and
+ * gbm_surface_has_free_buffers() can be used.
+ *
+ * \param surf The surface
+ *
+ * \return The file descriptor
+ */
+
+GBM_EXPORT struct gbm_surface *
+gbm_surface_import(struct gbm_device *gbm, int fd)
+
+Maybe add an EGL function to get the gbm_surface for a
+wl_surface. Then we can add (on the consumer side):
+
+  gbm_surface_set_usage(struct gbm_surface *surface, uint32_t flags)
+
+to modify usage flags on the fly. The gbm_bos returned by the surface
+aren't guaranteed to change immediately.
+
+Also add
+
+  gbm_bo_export(struct gbm_bo *bo, uint32_t type, void *buffer)
+
+to create the kms fb internally with whatever planes and fb_modifiers.
+
+Get in and out fences from a gbm_bo.
+
+Implementation uses a socket pair (that's the fd returned from export)
+and shares buffers through that by passing dmabuf fds. When the
+consumer side modifies the usage flags, it sends back hints on the
+socket, which the producer side receives and updates the usage flags
+for the surface.
+
+Protocol:
+
+  1) Create socketpair, write handshake (version, caps), consumer
+     sends ack, with its version and caps. The socket pair *is* the
+     surface.
+
+  2) Create buffers. Producer creates buffers, assigns handle and
+     sends details (width, height, format, stride, tiling, fds,
+     modifiers). what if consumer/server needs to create a buffer, eg
+     it's contiguous memory and only server can alloc).
+
+  3) Present buffer. Do we actually need this, or is it enough to be
+     able to send a unique handle across higher level protocol (eg
+     dri3 or wayland) and then have a way to extract a gbm_bo from the
+     gbm_surface on the consumer side? If we don't have present,
+     gbm_surface isn't the best name... gbm_pool or so? Maybe
+     necessary for fences?
+
+  4) Adjust usage. The compositor (consumer side) needs to use the bos
+     from the surface in a new way and sends back new use
+     flags. Producer deletes old buffers and create new ones with new
+     use flags.
+
+
+Handshake sent from server:
+
+uint32_t	0x67626d31	gbm_surface magic (fourcc gbm1)
+uint32_t	0x00000001	server version
+
+Handshake reply:
+
+uint32_t	0x67000000	handshake reply opcode
+uint32_t	0x00000001	client version
+
+
+Capability:
+
+uint32_t	0x67000001	cap opcode
+uint32_t	length		block length
+uint32_t	cap		capability token (one is fb_modifier,
+				  data is the modifier)
+uint32_t        cap data	optional cap data
+
+Add dmabuf (sent from client):
+
+fd		buffer		dmabuf handle
+uint32_t	size		size
+
+Add plane (sent from client):
+
+uint32_t	dmabuf		dmabuf index
+uint32_t	offset		offset into dmabuf
+uint32_t	stride		stride
+
+Create buffer (sent from client):
+
+uint32_t	0x67000002	create buffer opcode
+uint32_t	length		block length
+uint32_t	handle		handle for new buffer
+uint32_t	format		drm fourcc
+uint32_t	width
+uint32_t	height
+
+
+Adjust usage (sent from server):
+
+uint32_t	0x67000003	adjust usage opcode
+uint32_t	usage...

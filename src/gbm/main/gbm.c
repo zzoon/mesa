@@ -538,3 +538,85 @@ gbm_surface_has_free_buffers(struct gbm_surface *surf)
 {
    return surf->gbm->surface_has_free_buffers(surf);
 }
+
+
+#define GBM_OPCODE_HANDSHAKE            0x67626d31
+#define GBM_OPCODE_HANDSHAKE_REPLY      0x67000000
+
+/* producer side */
+GBM_EXPORT int
+gbm_surface_export(struct gbm_surface *surf)
+{
+   if (socketpair(AF_UNIX, SOCK_STREAM | SOCK_CLOEXEC, 0, sv) < 0)
+      return -1;
+
+   surf->socket = sv[0];
+
+   uint32_t handshake[2] = {
+      GBM_OPCODE_HANDSHAKE,
+      1
+   };
+
+   write(surf->socket, handshake, sizeof(handshake));
+
+   return sv[1];
+}
+
+static int
+gbm_surface_finsh_handshake(struct gbm_surface *surf)
+{
+   uint32_t reply[32];
+
+   if (surf->initialized)
+      return 0;
+
+   len = read(surf->socket, reply, sizeof(reply));
+   if (len == -1)
+      goto bail;
+
+   if (reply[0] != GBM_OPCODE_HANDSHAKE_REPLY)
+      goto bail;
+
+   if (len < 8)
+      goto bail;
+
+   surf->version = reply[1];
+
+   return 0;
+
+ bail:
+   close(surf->socket);
+   surf->socket = -1;
+   return -1;
+}
+
+/* consumer side */
+
+GBM_EXPORT struct gbm_surface *
+gbm_surface_import(struct gbm_device *gbm, int fd)
+{
+   struct gbm_surface *surf;
+
+   uint32_t handshake[32];
+   int len = read(fd, handshake, sizeof(handshake));
+   if (len == -1)
+      return NULL;
+
+   if (handshake[0] != GBM_OPCODE_HANDSHAKE) {
+      errno = EINVAL;
+      return NULL;
+   }
+
+   surf = gbm->surface_create(gbm, width, height, format, flags);
+   surf->socket = fd;
+   surf->version = handshake[1];
+
+   uint32_t reply[2] = {
+      GBM_OPCODE_HANDSHAKE_REPLY,
+      surf->version
+   };
+
+   write(surf->socket, reply, sizeof(reply));
+
+   return surf;
+}
