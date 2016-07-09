@@ -159,6 +159,47 @@ __gen_ufixed(float v, uint32_t start, uint32_t end, uint32_t fract_bits)
    return uint_val << start;
 }
 
+static inline uint64_t
+__gen_unpack_uint(uint64_t dw, uint32_t start, uint32_t end)
+{
+   uint64_t mask = (~0ul >> (64 - (end - start + 1)));
+
+   return (dw >> start) & mask;
+}
+
+static inline int64_t
+__gen_unpack_sint(uint64_t dw, uint32_t start, uint32_t end)
+{
+   return ((int64_t) dw << (63 - end)) >> (64 - (end - start + 1));
+}
+
+static inline uint64_t
+__gen_unpack_float(uint64_t dw)
+{
+   return ((union __gen_value) { .dw = (dw) }).f;
+}
+
+static inline uint64_t
+__gen_unpack_offset(uint64_t dw, uint32_t start, uint32_t end)
+{
+   uint64_t mask = (~0ul >> (64 - (end - start + 1))) << start;
+
+   return dw & mask;
+}
+
+static inline float
+__gen_unpack_ufixed(uint64_t dw, uint32_t start, uint32_t end, uint32_t fract_bits)
+{
+   return (float) __gen_unpack_uint(dw, start, end) / (1 << fract_bits);
+}
+
+static inline float
+__gen_unpack_sfixed(uint64_t dw, uint32_t start, uint32_t end, uint32_t fract_bits)
+{
+   return (float) __gen_unpack_sint(dw, start, end) / (1 << fract_bits);
+}
+
+
 #ifndef __gen_address_type
 #error #define __gen_address_type before including this file
 #endif
@@ -470,6 +511,79 @@ class Group(object):
             print("   dw[%d] = %s;" % (index, v))
             print("   dw[%d] = %s >> 32;" % (index + 1, v))
 
+    def emit_unpack_function(self, name):
+        dwords = {}
+        self.collect_dwords(dwords, 0, "")
+
+        print("static inline void\n%s_unpack(const void * restrict src,\n%sstruct %s * restrict values)\n{" %
+              (name, ' ' * (len(name) + 8), name))
+
+        print("   const uint32_t *dw = (const uint32_t *) src;\n")
+
+        # Determine number of dwords in this group. If we have a size, use
+        # that, since that'll account for MBZ dwords at the end of a group
+        # (like dword 8 on BDW+ 3DSTATE_HS). Otherwise, use the largest dword
+        # index we've seen plus one.
+        if self.size > 0:
+            length = self.size // 32
+        else:
+            length = max(dwords.keys()) + 1
+
+        for index in range(length):
+            # Handle MBZ dwords
+            if not index in dwords:
+                continue
+
+            dw = dwords[index]
+            if index > 0 and index - 1 in dwords and dw == dwords[index - 1]:
+                continue
+
+            print("   const uint32_t dw%d __attribute__((unused)) = dw[%d];" % (index, index))
+            dword_start = index * 32
+
+            field_index = 0
+            for field in dw.fields:
+                if field.type == "mbo":
+                    continue
+                elif field.type == "uint":
+                    s = "__gen_unpack_uint(dw%d, %d, %d)" % \
+                        (index, field.start - dword_start, field.end - dword_start)
+                elif field.type == "int":
+                    s = "__gen_unpack_sint(dw%d, %d, %d)" % \
+                        (index, field.start - dword_start, field.end - dword_start)
+                elif field.type == "bool":
+                    s = "__gen_unpack_uint(dw%d, %d, %d)" % \
+                        (index, field.start - dword_start, field.end - dword_start)
+                elif field.type == "float":
+                    s = "__gen_unpack_float(dw%d)" % (index)
+                elif field.type == "offset":
+                    s = "__gen_unpack_offset(dw%d, %d, %d)" % \
+                        (index, field.start - dword_start, field.end - dword_start)
+                elif field.type == "address":
+                    s = "__gen_unpack_address(dw%d, %d, %d)" % \
+                        (index, field.start - dword_start, field.end - dword_start)
+                elif field.type == 'ufixed':
+                    s = "__gen_unpack_ufixed(dw%d, %d, %d, %d)" % \
+                        (index, field.start - dword_start, field.end - dword_start, field.fractional_size)
+                elif field.type == 'sfixed':
+                    s = "__gen_unpack_sfixed(dw%d, %d, %d, %d)" % \
+                        (index, field.start - dword_start, field.end - dword_start, field.fractional_size)
+                elif field.type in self.parser.structs:
+                    print("   %s_unpack(&dw[%d], &values->%s%s);" %
+                          (self.parser.gen_prefix(safe_name(field.type)), index, field.name, field.dim))
+                    continue
+                else:
+                    print("#error unhandled type '%s' for field '%s'" % (field.type, field.name))
+                    continue
+
+                print("   values->%s%s = %s;" % (field.name, field.dim, s))
+
+            if index < length - 1:
+                print("");
+
+        print("}\n")
+
+
 class Value(object):
     def __init__(self, attrs):
         self.name = safe_name(attrs["name"])
@@ -572,6 +686,10 @@ class Parser(object):
 
         print("}\n")
 
+    def emit_unpack_function(self, name, group):
+        name = self.gen_prefix(name)
+        group.emit_unpack_function(name)
+
     def emit_instruction(self):
         name = self.instruction
         if not self.length == None:
@@ -597,6 +715,8 @@ class Parser(object):
 
         self.emit_pack_function(self.instruction, self.group)
 
+        self.emit_unpack_function(self.instruction, self.group)
+
     def emit_register(self):
         name = self.register
         if not self.reg_num == None:
@@ -618,6 +738,7 @@ class Parser(object):
 
         self.emit_template_struct(self.struct, self.group)
         self.emit_pack_function(self.struct, self.group)
+        self.emit_unpack_function(self.struct, self.group)
 
     def emit_enum(self):
         print('/* enum %s */' % self.gen_prefix(self.enum))
