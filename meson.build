@@ -34,7 +34,9 @@ with_windowsdri = false
 with_gles1 = get_option('gles1')
 with_gles2 = get_option('gles2')
 with_opengl = get_option('opengl')
+with_any_opengl = with_opengl or with_gles1 or with_gles2
 with_shared_glapi = get_option('shared-glapi')
+
 # TODO: these will need options, but at the moment they just control header
 # installs
 with_glx = false
@@ -51,6 +53,15 @@ endif
 # We require OpenGL for OpenGL ES
 if (with_gles1 or with_gles2) and not with_opengl
   error('building OpenGL ES without OpenGL is not supported.')
+endif
+
+with_dri = false
+with_dri_i965 = false
+_drivers = get_option('dri-drivers')
+if _drivers != ''
+  _split = _drivers.split(',')
+  with_dri_i965 = _split.contains('i965')
+  with_dri = true
 endif
 
 # TODO: there are more platforms required for non-vulkan drivers
@@ -91,7 +102,8 @@ endif
 # default arguments for both C and C++.
 pre_args = ['-D__STDC_CONSTANT_MACROS', '-D__STDC_FORMAT_MACROS',
             '-D__STDC_LIMIT_MACROS',
-            '-DVERSION="@0@"'.format(meson.project_version())]
+            '-DVERSION="@0@"'.format(meson.project_version()),
+            '-DPACKAGE_VERSION=VERSION']
 
 # Define DEBUG for debug and debugoptimized builds
 if get_option('buildtype').startswith('debug')
