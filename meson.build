@@ -26,6 +26,24 @@ with_vulkan_icd_dir = get_option('vulkan_icd_dir')
 with_tests = get_option('build-tests')
 with_valgrind = get_option('valgrind')
 
+with_gles1 = get_option('gles1')
+with_gles2 = get_option('gles2')
+with_opengl = get_option('opengl')
+with_shared_glapi = get_option('shared-glapi')
+
+# shared-glapi is required if at least two OpenGL APIs are being built
+if not with_shared_glapi
+  if ((with_gles1 and with_gles2) or (with_gles1 and with_opengl)
+      or (with_gles2 and with_opengl))
+    error('shared-glapi required for building two or more of OpenGL, OpenGL ES 1.x, OpenGL ES 2.x')
+  endif
+endif
+
+# We require OpenGL for OpenGL ES
+if (with_gles1 or with_gles2) and not with_opengl
+  error('building OpenGL ES without OpenGL is not supported.')
+endif
+
 # TODO: there are more platforms required for non-vulkan drivers
 with_platform_wayland = false
 with_platform_x11 = false
@@ -331,6 +349,7 @@ endif
 # pthread stubs. Lets not and say we didn't
 
 # TODO: selinux
+dep_selinux = []
 
 # TODO: llvm-prefix and llvm-shared-libs
 

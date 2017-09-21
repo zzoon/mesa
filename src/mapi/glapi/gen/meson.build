@@ -18,6 +18,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+gl_and_es_api_files = files('gl_and_es_API.xml')
+
 api_xml_files = files(
   'gl_API.xml',
   'es_EXT.xml',

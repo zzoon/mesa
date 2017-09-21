@@ -25,7 +25,11 @@
 #include "../../../mesa/main/glheader.h"
 
 #include "glapi/glapi.h"
-#include "glapi/glapitable.h"
+#ifdef MESON
+# include "glapitable.h"
+#else
+# include "glapi/glapitable.h"
+#endif
 
 struct name_offset {
    const char *name;
