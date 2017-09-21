@@ -18,19 +18,37 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-subdir('glcpp')
-
-glsl_parser = custom_target(
-  'glsl_parser',
-  input : 'glsl_parser.yy',
-  output : ['glsl_parser.cpp', 'glsl_parser.h'],
-  command : [prog_bison, '-o', '@OUTPUT0@', '-p', '_mesa_glsl_',
+glcpp_parse = custom_target(
+  'glcpp-parse.[ch]',
+  input : 'glcpp-parse.y',
+  output : ['glcpp-parse.c', 'glcpp-parse.h'],
+  command : [prog_bison, '-o', '@OUTPUT0@', '-p', 'glcpp_parser_',
              '--defines=@OUTPUT1@', '@INPUT@'],
 )
 
-glsl_lexer_cpp = custom_target(
-  'glsl_lexer_cpp',
-  input : 'glsl_lexer.ll',
-  output : 'glsl_lexer.cpp',
+glcpp_lex = custom_target(
+  'glcpp-lex.c',
+  input : 'glcpp-lex.l',
+  output : 'glcpp-lex.c',
   command : [prog_flex, '-o', '@OUTPUT@', '@INPUT@'],
+)
+
+libglcpp = static_library(
+  'glcpp',
+  [glcpp_lex, glcpp_parse, files('glcpp.h', 'pp.c')],
+  link_with : libmesa_util,
+  include_directories : [inc_common],
+  c_args : [c_vis_args, no_override_init_args, c_msvc_compat_args],
+  cpp_args : [cpp_vis_args, cpp_msvc_compat_args],
+  build_by_default : false,
+)
+
+glcpp = executable(
+  'glcpp',
+  'glcpp.c',
+  dependencies : [dep_m],
+  include_directories : [inc_common],
+  link_with : [libglcpp, libglsl_util],
+  c_args : [c_vis_args, no_override_init_args, c_msvc_compat_args],
+  build_by_default : false,
 )

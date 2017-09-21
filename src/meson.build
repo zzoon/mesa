@@ -18,15 +18,26 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-# TODO: libglsl_util
-
-# TODO: git_sha. There's a meson builtin for this
-
 inc_common = include_directories(
   '../include', '.', 'mapi', 'mesa', 'gallium/include', 'gallium/auxiliary')
 inc_mesa = include_directories('mesa')
 inc_mapi = include_directories('mapi')
 inc_src = include_directories('.')
+
+libglsl_util = static_library(
+  'glsl_util',
+  files('mesa/main/extensions_table.c', 'mesa/main/imports.c',
+        'mesa/program/prog_parameter.c', 'mesa/program/symbol_table.c',
+        'mesa/program/dummy_errors.c'),
+  include_directories : [inc_common],
+  c_args : [c_vis_args],
+  build_by_default : false,
+)
+
+sha1_h = vcs_tag(
+  input : 'git_sha1.h.in',
+  output : 'git_sha1.h',
+)
 
 subdir('gtest')
 subdir('util')

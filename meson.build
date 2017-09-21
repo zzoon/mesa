@@ -388,6 +388,10 @@ endif
 
 # pthread stubs. Lets not and say we didn't
 
+_req_parse = with_opengl or with_gles1 or with_gles2
+prog_bison = find_program('bison', required : _req_parse)
+prog_flex = find_program('flex', required : _req_parse)
+
 # TODO: selinux
 dep_selinux = []
 
