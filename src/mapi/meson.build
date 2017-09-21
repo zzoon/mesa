@@ -32,3 +32,6 @@ subdir('glapi')
 if with_gles1
   subdir('es1api')
 endif
+if with_gles2
+  subdir('es2api')
+endif
