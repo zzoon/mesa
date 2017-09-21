@@ -25,6 +25,11 @@ with_dri3 = true  # XXX: need a switch for this
 with_vulkan_icd_dir = get_option('vulkan_icd_dir')
 with_tests = get_option('build-tests')
 with_valgrind = get_option('valgrind')
+with_asm = get_option('asm')
+
+# XXX: yeah, do these
+with_appledri = false
+with_windowsdri = false
 
 with_gles1 = get_option('gles1')
 with_gles2 = get_option('gles2')
@@ -218,7 +223,38 @@ endif
 
 # TODO: cross-compiling. I don't think this is relavent to meson
 
-# TODO: assembly support. mesa and vc4
+# FIXME: enable asm when cross compiler
+# This is doable (autotools does it), but it's not of immediate concern
+if meson.is_cross_build()
+  message('Cross compiling, disabling asm')
+  with_asm = false
+endif
+
+if with_asm
+  # TODO: SPARC and PPC
+  if target_machine.cpu_family() == 'x86'
+    if ['linux', 'bsd'].contains(target_machine.system()) # FIXME: hurd?
+      with_asm_arch = 'x86'
+      pre_args += ['-DUSE_X86_ASM', '-DUSE_MMX_ASM', '-DUSE_3DNOW_ASM',
+                   '-DUSE_SSE_ASM']
+    endif
+  elif target_machine.cpu_family() == 'x86_64'
+    if target_machine.system() == 'linux'
+      with_asm_arch = 'x86_64'
+      pre_args += ['-DUSE_X86_64_ASM']
+    endif
+  elif target_machine.cpu_family() == 'arm'
+    if target_machine.system() == 'linux'
+      with_asm_arch = 'arm'
+      pre_args += ['-DUSE_ARM_ASM']
+    endif
+  elif target_machine.cpu_family() == 'aarch64'
+    if target_machine.system() == 'linux'
+      with_asm_arch = 'aarch64'
+      pre_args += ['-DUSE_AARCH64_ASM']
+    endif
+  endif
+endif
 
 # Check for standard headers and functions
 if cc.has_header_symbol('sys/sysmacros.h', 'major')
@@ -465,6 +501,8 @@ foreach a : cpp_args
 endforeach
 
 inc_include = include_directories('include')
+
+pkg = import('pkgconfig')
 
 subdir('include')
 subdir('src')

@@ -18,12 +18,35 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-inc_drm_uapi = include_directories('drm-uapi')
-inc_vulkan = include_directories('vulkan')
+es1_glapi_mapi_tmp_h = custom_target(
+  'es1_glapi_mapi_tmp.h',
+  input : ['../mapi_abi.py', gl_and_es_api_files],
+  output : 'glapi_mapi_tmp.h',
+  command : [prog_python2, '@INPUT0@', '--printer', 'es1api', '@INPUT1@'],
+  depend_files : api_xml_files,
+  capture : true,
+)
 
-if with_gles1
-  install_headers(
-    'GLES/egl.h', 'GLES/gl.h', 'GLES/glext.h', 'GLES/glplatform.h',
-    subdir : 'GLES',
-  )
-endif
+libglesv1_cm = shared_library(
+  'GLESv1_CM',
+  ['../entry.c', es1_glapi_mapi_tmp_h],
+  c_args : [c_msvc_compat_args, c_vis_args, '-DMAPI_MODE_BRIDGE',
+            '-DMAPI_ABI_HEADER="@0@"'.format(es1_glapi_mapi_tmp_h.full_path())],
+  link_args : [ld_args_gc_sections],
+  include_directories : [inc_src, inc_include, inc_mapi],
+  link_with : libglapi,
+  dependencies : [dep_thread, dep_libdrm, dep_m, dep_dl],
+  version : '1.1',
+  install : true,
+)
+
+pkg.generate(
+  libraries : libglesv1_cm,
+  # TODO: private libraries?
+  name : 'glesv1_cm',
+  version : meson.project_version(),
+  description : 'Mesa OpenGL ES 1.1 CM library',
+  filebase : 'glesv1_cm'
+)
+
+test('es1-ABI-check', find_program('ABI-check'))
