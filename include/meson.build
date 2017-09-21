@@ -43,3 +43,18 @@ endif
 if with_gles1 or with_gles2 # or with_egl
   install_headers('KHR/khrplatform.h', subdir : 'KHR')
 endif
+
+if with_opengl
+  install_headers(
+    'GL/gl.h', 'GL/glext.h', 'GL/glcorearb.h', 'GL/gl_mangle.h',
+    subdir : 'GL',
+  )
+endif
+
+if with_glx
+  install_headers('GL/glx.h', 'GL/glext.h', 'GL/glx_mangle.h', subdir : 'GL')
+endif
+
+if with_osmesa
+  install_headers('GL/osmesa.h', subdir : 'GL')
+endif

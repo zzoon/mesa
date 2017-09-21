@@ -35,6 +35,10 @@ with_gles1 = get_option('gles1')
 with_gles2 = get_option('gles2')
 with_opengl = get_option('opengl')
 with_shared_glapi = get_option('shared-glapi')
+# TODO: these will need options, but at the moment they just control header
+# installs
+with_glx = false
+with_osmesa = false
 
 # shared-glapi is required if at least two OpenGL APIs are being built
 if not with_shared_glapi
