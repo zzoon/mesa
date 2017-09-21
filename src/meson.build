@@ -29,7 +29,7 @@ inc_mapi = include_directories('mapi')
 
 subdir('gtest')
 subdir('util')
-#subdir('mapi/glapi/gen')
+subdir('mapi/glapi/gen')
 # TODO: mapi
 # TODO: opengl
 # TODO: glx
