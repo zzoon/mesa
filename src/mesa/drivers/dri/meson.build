@@ -29,19 +29,19 @@ if with_dri
     dri_link += 'i965_dri.so'
   endif
 
-  #libmesa_dri_drivers = shared_library(
-    #'mesa_dri_drivers',
-    #dummy_cpp,  # see meson #2180
-    #link_whole : dri_drivers,
-    #link_with : [libmegadriver_stub, libdricommon, libxmlconfig, libglapi,
-                 #libmesa_util, libnir],
-    #dependencies : [dep_selinux, dep_libdrm, dep_expat, dep_m, dep_thread,
-                    #dep_dl],
-    #link_args : [ld_args_bsymbolic, ld_args_gc_sections],
-  #)
+  libmesa_dri_drivers = shared_library(
+    'mesa_dri_drivers',
+    dummy_cpp,  # see meson #2180
+    link_whole : dri_drivers,
+    link_with : [libmegadriver_stub, libdricommon, libxmlconfig, libglapi,
+                 libmesa_util, libnir, libmesa_classic],
+    dependencies : [dep_selinux, dep_libdrm, dep_expat, dep_m, dep_thread,
+                    dep_dl],
+    link_args : [ld_args_bsymbolic, ld_args_gc_sections],
+  )
 
-  #meson.add_install_script(
-    #join_paths(meson.source_root(), 'bin/install_megadrivers.py'),
-    #dri_link
-  #)
+  meson.add_install_script(
+    join_paths(meson.source_root(), 'bin/install_megadrivers.py'),
+    dri_link,
+  )
 endif

@@ -472,21 +472,22 @@ files_libmesa_classic = files(
 libmesa_sse41 = []
 
 matypes_h = []
-if with_arch_asm == 'x86' or with_arch_asm == 'x86_64'
+if with_asm_arch == 'x86' or with_asm_arch == 'x86_64'
   gen_matypes = executable(
     'gen_matypes',
     'x86/gen_matypes.c',
+    c_args : [c_vis_args, c_msvc_compat_args],
+    include_directories : inc_common,
   )
   matypes_h = custom_target(
     'matypes.h',
-    input : gen_matypes,
-    output : 'maytypes.h',
-    command : ['@INPUT@'],
+    output : 'matypes.h',
+    command : [gen_matypes],
     capture : true,
   )
 endif
-if with_arch_asm == 'x86'
-  libmesa_common_files += files(
+if with_asm_arch == 'x86'
+  files_libmesa_common += files(
     'x86/assyntax.h',
     'x86/clip_args.h',
     'x86/norm_args.h',
@@ -515,8 +516,8 @@ if with_arch_asm == 'x86'
     'x86/sse_normal.S',
     'x86/read_rgba_span_x86.S',
   )
-elif with_arch_asm == 'x86_64'
-  libmesa_common_files += files('x86-64/x86-64.h', 'x86-64/xform4.S')
+elif with_asm_arch == 'x86_64'
+  files_libmesa_common += files('x86-64/x86-64.h', 'x86-64/xform4.S')
 endif
 # TODO: sparc
 
@@ -570,7 +571,7 @@ libmesa_classic = static_library(
    main_api_exec_c, main_enums_c, format_fallback_c, format_info_h,
    format_pack_c, format_unpack_c, get_hash_h, main_marshal_generated_c,
    main_marshal_generated_h, main_dispatch_h, ir_expression_operation_h,
-   nir_opcodes_h, main_remap_helper_h],
+   nir_opcodes_h, main_remap_helper_h, matypes_h],
   c_args : [c_vis_args, c_msvc_compat_args],
   cpp_args : [cpp_vis_args, cpp_msvc_compat_args],
   include_directories : [inc_common, include_directories('main')],

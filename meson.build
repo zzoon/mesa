@@ -250,7 +250,7 @@ if meson.is_cross_build()
   with_asm = false
 endif
 
-with_arch_asm = ''
+with_asm_arch = ''
 if with_asm
   # TODO: SPARC and PPC
   if target_machine.cpu_family() == 'x86'
