@@ -36,7 +36,10 @@ def main():
     to = os.path.join(os.environ.get('MESON_INSTALL_DESTDIR_PREFIX'), args.libdir)
 
     for each in args.drivers:
-        os.link(args.megadriver, os.path.join(to, each))
+        final = os.path.join(to, each)
+        if os.path.exists(final):
+            os.unlink(final)
+        os.link(args.megadriver, final)
 
 
 if __name__ == '__main__':
