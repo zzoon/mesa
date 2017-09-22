@@ -100,10 +100,14 @@ endif
 # Arguments for the preprocessor, put these in a separate array from the C and
 # C++ (cpp in meson terminology) arguments since they need to be added to the
 # default arguments for both C and C++.
-pre_args = ['-D__STDC_CONSTANT_MACROS', '-D__STDC_FORMAT_MACROS',
-            '-D__STDC_LIMIT_MACROS',
-            '-DVERSION="@0@"'.format(meson.project_version()),
-            '-DPACKAGE_VERSION=VERSION']
+pre_args = [
+  '-D__STDC_CONSTANT_MACROS',
+  '-D__STDC_FORMAT_MACROS',
+  '-D__STDC_LIMIT_MACROS',
+  '-DVERSION="@0@"'.format(meson.project_version()),
+  '-DPACKAGE_VERSION=VERSION',
+  '-DPACKAGE_BUGREPORT="https://bugs.freedesktop.org/enter_bug.cgi?product=Mesa"',
+]
 
 # Define DEBUG for debug and debugoptimized builds
 if get_option('buildtype').startswith('debug')
@@ -246,6 +250,7 @@ if meson.is_cross_build()
   with_asm = false
 endif
 
+with_arch_asm = ''
 if with_asm
   # TODO: SPARC and PPC
   if target_machine.cpu_family() == 'x86'
