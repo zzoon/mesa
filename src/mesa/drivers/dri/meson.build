@@ -42,6 +42,8 @@ if with_dri
 
   meson.add_install_script(
     join_paths(meson.source_root(), 'bin/install_megadrivers.py'),
+    libmesa_dri_drivers.full_path(),
+    get_option('libdir'),
     dri_link,
   )
 endif
