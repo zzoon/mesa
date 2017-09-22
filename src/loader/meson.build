@@ -18,43 +18,25 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-inc_common = include_directories(
-  '../include', '.', 'mapi', 'mesa', 'gallium/include', 'gallium/auxiliary')
-inc_mesa = include_directories('mesa')
-inc_mapi = include_directories('mapi')
-inc_src = include_directories('.')
+if with_platform_x11 and with_dri3
+  libloader_dri3_helper = static_library(
+    'loader_dri3_helper',
+    ['loader_dri3_helper.c', 'loader_dri3_helper.h'],
+    c_args : c_vis_args,
+    include_directories : inc_include,
+    dependencies : [dep_xcb_dri3, dep_libdrm],
+    build_by_default : false,
+  )
+else
+  libloader_dri3_helper = []
+endif
 
-libglsl_util = static_library(
-  'glsl_util',
-  files('mesa/main/extensions_table.c', 'mesa/main/imports.c',
-        'mesa/program/prog_parameter.c', 'mesa/program/symbol_table.c',
-        'mesa/program/dummy_errors.c'),
-  include_directories : [inc_common],
-  c_args : [c_vis_args],
+libloader = static_library(
+  'loader',
+  ['loader.c', 'loader.h', 'pci_id_driver_map.c', 'pci_id_driver_map.h',
+   xmlpool_options_h],
+  c_args : [c_vis_args, '-DUSE_DRICONF'],
+  include_directories : [inc_include, inc_src, inc_util],
+  dependencies : dep_libdrm,
   build_by_default : false,
 )
-
-sha1_h = vcs_tag(
-  input : 'git_sha1.h.in',
-  output : 'git_sha1.h',
-)
-
-subdir('gtest')
-subdir('util')
-subdir('mapi/glapi/gen')
-subdir('mapi')
-# TODO: opengl
-# TODO: glx
-# TODO: osmesa
-subdir('compiler')
-subdir('egl/wayland/wayland-drm')
-subdir('vulkan')
-subdir('amd')
-subdir('intel')
-# TODO: vc4
-subdir('mesa')
-subdir('loader')
-# TODO: dri_glx
-# TODO: gbm
-# TODO: egl
-# TODO: gallium
