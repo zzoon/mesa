@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# encoding=utf-8
 # Copyright © 2017 Intel Corporation
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -18,30 +20,24 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-subdir('common')
-subdir('i965')
+"""Script to install megadriver symlinks for meson."""
 
-if with_dri
-  dri_drivers = []
-  dri_link = []
-  if with_dri_i965
-    dri_drivers += libi965
-    dri_link += 'i965_dri.so'
-  endif
+import argparse
+import os
 
-  #libmesa_dri_drivers = shared_library(
-    #'mesa_dri_drivers',
-    #dummy_cpp,  # see meson #2180
-    #link_whole : dri_drivers,
-    #link_with : [libmegadriver_stub, libdricommon, libxmlconfig, libglapi,
-                 #libmesa_util, libnir],
-    #dependencies : [dep_selinux, dep_libdrm, dep_expat, dep_m, dep_thread,
-                    #dep_dl],
-    #link_args : [ld_args_bsymbolic, ld_args_gc_sections],
-  #)
 
-  #meson.add_install_script(
-    #join_paths(meson.source_root(), 'bin/install_megadrivers.py'),
-    #dri_link
-  #)
-endif
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('megadriver')
+    parser.add_argument('libdir')
+    parser.add_argument('drivers', nargs='+')
+    args = parser.parse_args()
+
+    to = os.path.join(os.environ.get('MESON_INSTALL_DESTDIR_PREFIX'), args.libdir)
+
+    for each in args.drivers:
+        os.link(args.megadriver, os.path.join(to, each))
+
+
+if __name__ == '__main__':
+    main()
