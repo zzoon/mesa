@@ -48,7 +48,7 @@ subdir('nir')
 
 spirv2nir = executable(
   'spirv2nir',
-  [files('spirv/spirv2nir.c'), dummy_cpp],
+  files('spirv/spirv2nir.c'),
   dependencies : [dep_m, dep_thread],
   include_directories : [inc_common, inc_nir, include_directories('spirv')],
   link_with : [libnir, libmesa_util],

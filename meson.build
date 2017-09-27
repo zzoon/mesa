@@ -19,7 +19,7 @@
 # SOFTWARE.
 
 project('mesa', ['c', 'cpp'], version : '17.3.0-devel', license : 'MIT',
-        default_options : ['c_std=c99'])
+        default_options : ['c_std=c99'], meson_version : '>= 0.43.0')
 
 with_dri3 = true  # XXX: need a switch for this
 with_vulkan_icd_dir = get_option('vulkan_icd_dir')
@@ -426,14 +426,6 @@ endif
 # TODO: swr
 
 # TODO: gallium driver dirs
-
-# FIXME: this is a workaround for #2326
-prog_touch = find_program('touch')
-dummy_cpp = custom_target(
-  'dummy_cpp',
-  output : 'dummy.cpp',
-  command : [prog_touch, '@OUTPUT@'],
-)
 
 foreach a : pre_args
   add_project_arguments(a, language : ['c', 'cpp'])
