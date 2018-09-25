@@ -576,6 +576,9 @@ optimizations = [
    (('~f2u32', ('i2f', 'a@32')), a),
    (('~f2u32', ('u2f', 'a@32')), a),
 
+   # TODO: Should this be imprecise?
+   (('f2f32', ('f2f16', 'a@32')), a),
+
    # Section 5.4.1 (Conversion and Scalar Constructors) of the GLSL 4.60 spec
    # says:
    #
