@@ -578,6 +578,7 @@ optimizations = [
 
    # TODO: Should this be imprecise?
    (('f2f32', ('f2f16', 'a@32')), a),
+   (('f2f16', ('f2f32', 'a@16')), a),
 
    # Section 5.4.1 (Conversion and Scalar Constructors) of the GLSL 4.60 spec
    # says:
